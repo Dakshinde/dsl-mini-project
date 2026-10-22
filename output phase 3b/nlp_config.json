@@ -1,0 +1,18 @@
+{
+  "module": "HEMS NLP Command Parser",
+  "version": "0.1.0",
+  "library": "spaCy",
+  "method": "Rule-based parsing with regular expressions",
+  "supported_appliances": [
+    "ac",
+    "fan",
+    "refrigerator"
+  ],
+  "supported_ac_modes": [
+    "off",
+    "eco",
+    "dry",
+    "max_cool"
+  ],
+  "executes_hardware_commands": false
+}

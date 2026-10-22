@@ -1,0 +1,9 @@
+time_of_day,motion_detected,occupancy_probability,occupancy_percent,status,provisional
+morning,False,0.0952,9.52,Likely unoccupied,True
+morning,True,0.9474,94.74,Likely occupied,True
+afternoon,False,0.0793,7.93,Likely unoccupied,True
+afternoon,True,0.9364,93.64,Likely occupied,True
+evening,False,0.1972,19.72,Likely unoccupied,True
+evening,True,0.9767,97.67,Likely occupied,True
+night,False,0.1364,13.64,Likely unoccupied,True
+night,True,0.9643,96.43,Likely occupied,True

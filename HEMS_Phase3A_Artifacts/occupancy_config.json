@@ -1,0 +1,14 @@
+{
+  "model_name": "HEMS Bayesian Occupancy Estimator",
+  "version": "0.1.0",
+  "status": "provisional",
+  "time_periods": {
+    "morning": 0.5,
+    "afternoon": 0.45,
+    "evening": 0.7,
+    "night": 0.6
+  },
+  "p_motion_given_occupied": 0.9,
+  "p_motion_given_empty": 0.05,
+  "assumption": "Illustrative probabilities; not trained or validated against ground-truth occupancy labels."
+}

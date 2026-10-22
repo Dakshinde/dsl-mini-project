@@ -1,0 +1,13 @@
+command,intent,appliance,action,value,confidence,needs_clarification
+Set the AC to Eco mode,set_mode,ac,set_mode,eco,0.98,False
+Switch the air conditioner to dry mode,set_mode,ac,set_mode,dry,0.98,False
+Turn on the AC,power_control,ac,set_power,on,0.95,False
+Turn the AC off,set_mode,ac,set_mode,off,0.98,False
+Set AC to maximum cooling,set_mode,ac,set_mode,max_cool,0.98,False
+Turn the ceiling fan off,power_control,fan,set_power,off,0.95,False
+Start the BLDC fan,power_control,fan,set_power,on,0.95,False
+Keep the fridge running,power_control,refrigerator,set_power,on,0.95,False
+Save energy while I'm away,energy_saving,whole_home,optimize_energy,"{'energy_saving': True, 'occupancy_context': 'away'}",0.95,False
+Make the room comfortable,unknown,,,,0.0,True
+Turn on the fan and turn it off,power_control,fan,set_power,on,0.95,False
+,unknown,,,,0.0,True
