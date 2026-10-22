@@ -1,0 +1,66 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.tox/
+.eggs/
+venv/
+env/
+ENV/
+
+# Virtual Environment (if using built-in venv rather than .venv)
+.venv
+venv
+ENV
+venv.bak
+
+# Project-specific artifacts
+hems_random_forest.joblib
+hems_phase1_working_dataset.csv
+
+# Phase 3A Artifacts
+HEMS_Phase3A_Artifacts/
+bayesian_test_cases.csv
+occupancy_config.json
+occupancy_estimates.csv
+
+# Phase 3B Output
+"output phase 3b"/
+nlp_config.json
+nlp_test_results.csv
+
+# Phase 3C Output
+Output 3C/
+fuzzy_controller.py
+README.txt
+
+# FastAPI / Uvicorn
+.uwsgi
+.hg/
+.wiki/
+
+# Distribution / packaging
+.dist/
+.build/
+.pyc
+
+# Environment variables
+.env
+
+# IDE specific
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# MongoDB logs (if introduced later)
+mongosh/
+mongod.log
+
+# Temporary output files
+output/
+results/
+data/*.json

@@ -44,10 +44,19 @@ AWAY_PHRASES = [
 
 
 def contains_phrase(text, phrases):
-    return any(
-        re.search(r"\\b" + re.escape(p) + r"\\b", text)
-        for p in phrases
-    )
+    """Check if any of the given phrases appear in the text.
+    
+    This version uses a simpler approach: it checks if all words in a phrase
+    appear in the text (in any order), making it suitable for natural language
+    commands where intervening words are common.
+    """
+    text_lower = text.lower()
+    for phrase in phrases:
+        phrase_words = phrase.lower().split()
+        # Check if all words in the phrase appear in the text
+        if all(word in text_lower for word in phrase_words):
+            return True
+    return False
 
 
 def find_appliance(text):
@@ -59,7 +68,7 @@ def find_appliance(text):
         reverse=True
     )
     for alias, appliance in aliases:
-        if re.search(r"\\b" + re.escape(alias) + r"\\b", text):
+        if re.search(r"\b" + re.escape(alias) + r"\b", text):
             return appliance
     return None
 
@@ -67,7 +76,7 @@ def find_appliance(text):
 def find_ac_mode(text):
     for mode, phrases in AC_MODES.items():
         for phrase in sorted(phrases, key=len, reverse=True):
-            if re.search(r"\\b" + re.escape(phrase) + r"\\b", text):
+            if re.search(r"\b" + re.escape(phrase) + r"\b", text):
                 return mode
     return None
 
