@@ -33,6 +33,41 @@ Interactive Swagger documentation:
 http://127.0.0.1:8000/docs
 ```
 
+## Running tests
+
+Install the project dependencies, including the test dependency, with:
+
+```bash
+python -m pip install -r HEMS/requirements.txt
+```
+
+Run the Phase 5 integration test suite from the repository root:
+
+```bash
+python -m pytest tests/test_api.py -q
+```
+
+The suite covers:
+
+- Health checks
+- Random Forest prediction and model failures
+- Input range and data-type validation
+- Bayesian occupancy estimation
+- Valid, unknown, and conflicting NLP commands
+- Fuzzy control and import failures
+- Unified recommendation outputs and component disagreement
+- Missing required fields
+
+Latest verified result:
+
+```text
+34 passed, 32 warnings
+```
+
+The warnings are from dependency compatibility and deprecation notices:
+Pydantic V1-style validators, the Starlette/httpx test client integration,
+scikit-learn model-version metadata, and a scikit-fuzzy/NumPy deprecation.
+
 ## API endpoints
 
 ### 1. Health check
