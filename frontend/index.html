@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HEMS | Cognitive Smart Home</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.180.0/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@0.180.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">H</span>
+          <span><strong>HEMS</strong><small>Cognitive Smart Home</small></span>
+        </div>
+        <div class="residence-title">
+          <span class="eyebrow">LIVE RESIDENCE</span>
+          <h1>My Smart Residence <b>·</b> Floor 4</h1>
+        </div>
+        <div class="top-actions">
+          <span class="clock" id="clock">--:--</span>
+          <span class="connection-pill is-pending" id="connection-status">
+            <i></i><span>Connecting</span>
+          </span>
+          <button class="icon-button" title="Notifications" aria-label="Notifications">♢</button>
+          <button class="icon-button" title="Settings" aria-label="Settings">⚙</button>
+          <span class="avatar">D</span>
+        </div>
+      </header>
+
+      <section class="dashboard-grid">
+        <aside class="sidebar left-sidebar">
+          <section class="panel status-panel">
+            <div class="panel-heading"><h2>Device Status</h2><span class="live-dot">LIVE</span></div>
+            <div class="status-grid">
+              <div class="status-item"><span class="device-icon ac-icon">⌁</span><span>AC</span><strong id="ac-status">Recommendation</strong></div>
+              <div class="status-item"><span class="device-icon fan-icon">✣</span><span>Ceiling Fan</span><strong>Unknown</strong></div>
+              <div class="status-item"><span class="device-icon fridge-icon">▥</span><span>Refrigerator</span><strong>Unknown</strong></div>
+              <div class="status-item"><span class="device-icon sensor-icon">⌁</span><span>Occupancy</span><strong id="occupancy-status">--%</strong></div>
+            </div>
+            <div class="metric-row"><span>Temperature</span><strong id="temp-status">32°C</strong><span class="metric-good">●</span></div>
+            <div class="metric-row"><span>Humidity</span><strong id="humidity-status">70%</strong><span class="metric-good">●</span></div>
+          </section>
+
+          <section class="panel activity-panel">
+            <div class="panel-heading"><h2>System Activity</h2><button class="text-button" id="clear-activity">Clear</button></div>
+            <div class="activity-list" id="activity-list">
+              <div class="activity-item"><i class="activity-dot good"></i><span>Dashboard initialized<small>Just now</small></span></div>
+              <div class="activity-item"><i class="activity-dot"></i><span>Awaiting backend health check<small>Just now</small></span></div>
+            </div>
+          </section>
+
+          <section class="panel energy-panel">
+            <div class="panel-heading"><h2>Energy Usage</h2><span class="demo-label">DEMO</span></div>
+            <div class="energy-total"><strong>14.5</strong><span>kWh<br /><small>sample day</small></span></div>
+            <div class="chart" aria-label="Demonstration energy chart">
+              <svg viewBox="0 0 300 95" preserveAspectRatio="none">
+                <defs><linearGradient id="energy-fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8cc9a2" stop-opacity=".8"/><stop offset="1" stop-color="#8cc9a2" stop-opacity=".05"/></linearGradient></defs>
+                <path class="chart-area" d="M0,80 C25,76 33,67 53,70 S82,53 101,64 S130,18 148,37 S166,4 182,41 S211,72 224,42 S249,65 264,51 S284,44 300,38 L300,95 L0,95Z"/>
+                <path class="chart-line" d="M0,80 C25,76 33,67 53,70 S82,53 101,64 S130,18 148,37 S166,4 182,41 S211,72 224,42 S249,65 264,51 S284,44 300,38"/>
+              </svg>
+              <div class="chart-axis"><span>00</span><span>06</span><span>12</span><span>18</span><span>24</span></div>
+            </div>
+            <p class="panel-note">Illustrative data until measured energy telemetry is connected.</p>
+          </section>
+
+          <section class="panel scenes-panel">
+            <div class="panel-heading"><h2>Scene Presets</h2></div>
+            <div class="scene-buttons">
+              <button class="scene-button active" data-scene="away">◌ <span>Away</span></button>
+              <button class="scene-button" data-scene="comfort">◒ <span>Comfort</span></button>
+              <button class="scene-button" data-scene="eco">♧ <span>Energy Save</span></button>
+              <button class="scene-button" data-scene="night">◐ <span>Good Night</span></button>
+            </div>
+          </section>
+        </aside>
+
+        <section class="center-stage">
+          <div class="stage-toolbar">
+            <span><i class="pulse-dot"></i> 3D RESIDENCE VIEW</span>
+            <span class="stage-hint">Drag to orbit · Scroll to zoom · Click an appliance</span>
+          </div>
+          <div class="scene-wrap" id="scene-wrap">
+            <div class="scene-loading" id="scene-loading"><span class="loader"></span><small>Building residence view</small></div>
+            <div class="selection-card hidden" id="selection-card">
+              <button class="close-selection" id="close-selection">×</button>
+              <span class="eyebrow">SELECTED OBJECT</span>
+              <h3 id="selection-title">Living Room</h3>
+              <p id="selection-detail">Select an appliance or room to inspect it.</p>
+            </div>
+          </div>
+          <div class="stage-footer"><span>HEMS / PHASE 6 / VERSION 1</span><span id="last-updated">Last sync —</span></div>
+        </section>
+
+        <aside class="sidebar right-sidebar">
+          <section class="panel room-panel">
+            <div class="panel-heading"><h2>Room Controls</h2><span class="eyebrow">4 ROOMS</span></div>
+            <div class="room-list">
+              <button class="room-row selected"><span>⌂</span><b>Living Room</b><strong>32°C</strong><i></i></button>
+              <button class="room-row"><span>▦</span><b>Kitchen</b><strong>30°C</strong><i></i></button>
+              <button class="room-row"><span>▦</span><b>Kitchen · Vent</b><strong>Unknown</strong><i class="muted"></i></button>
+              <button class="room-row"><span>⌑</span><b>Bathroom</b><strong>Unknown</strong><i class="muted"></i></button>
+            </div>
+          </section>
+
+          <section class="panel climate-panel">
+            <div class="panel-heading"><h2>Climate Control</h2><span class="recommendation-badge">AI</span></div>
+            <div class="climate-readings">
+              <div class="reading"><span>Temperature</span><strong id="climate-temp">32.0°</strong></div>
+              <div class="reading"><span>Humidity</span><strong id="climate-humidity">70%</strong></div>
+              <div class="reading"><span>Occupancy estimate</span><strong id="climate-occupancy">--%</strong></div>
+            </div>
+            <div class="mode-display"><span class="mode-label">Suggested mode</span><strong id="suggested-mode">Awaiting data</strong><span id="cooling-demand">Cooling demand —</span></div>
+          </section>
+
+          <section class="panel appliance-panel">
+            <div class="panel-heading"><h2>Appliance Insights</h2></div>
+            <div class="insight-row"><span class="device-icon ac-icon">⌁</span><div><b>Air Conditioner</b><small id="ac-insight">Recommendation only · no physical control</small></div><strong id="ac-mode">—</strong></div>
+            <div class="insight-row"><span class="device-icon fan-icon">✣</span><div><b>Ceiling Fan</b><small>Device state unavailable</small></div><strong>Unknown</strong></div>
+            <div class="insight-row"><span class="device-icon fridge-icon">▥</span><div><b>Refrigerator</b><small>Device state unavailable</small></div><strong>Unknown</strong></div>
+          </section>
+
+          <section class="panel command-panel">
+            <div class="panel-heading"><h2>AI Command Center</h2><span class="recommendation-badge">NLP</span></div>
+            <form id="command-form" class="command-form">
+              <input id="command-input" type="text" placeholder="Try “turn on the AC”" autocomplete="off" />
+              <button type="submit">Send <span>↗</span></button>
+            </form>
+            <div class="command-result" id="command-result"><span>Enter a command to query the HEMS parser.</span></div>
+          </section>
+
+          <section class="panel alert-panel">
+            <div class="panel-heading"><h2>Maintenance Alerts</h2><span class="alert-count">0</span></div>
+            <div class="alert-empty"><span>✓</span><div><b>No active alerts</b><small>Monitoring recommendation services</small></div></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>

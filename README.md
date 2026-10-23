@@ -417,3 +417,47 @@ HTTP status: `200 OK`
 - The unified recommendation keeps the outputs from each component separate;
   the component outputs should not be treated as equivalent.
 - Input validation errors return HTTP `422`.
+
+## Phase 6 dashboard (version 1)
+
+The `phase-6-v1` branch includes a reference-inspired smart-home dashboard in
+[frontend/](/home/dakshhinde/Code/DSL-2/dsl-mini-project/frontend). It uses
+Three.js for the interactive residence scene and connects to the existing
+FastAPI endpoints for backend health, recommendations, and natural-language
+command parsing.
+
+Start the backend first:
+
+```bash
+source .venv/bin/activate
+python -m uvicorn HEMS.main:app --reload
+```
+
+In a second terminal, from the repository root, serve the frontend:
+
+```bash
+python -m http.server 5500 --directory frontend
+```
+
+Open:
+
+```text
+http://127.0.0.1:5500
+```
+
+Dashboard behavior:
+
+- Shows the actual backend connection state from `GET /health`.
+- Loads recommendation, occupancy, cooling-demand, and suggested-mode data
+  from `POST /recommendation`.
+- Sends commands to `POST /commands/parse` and displays the returned intent,
+  confidence, and clarification state.
+- Provides orbit, zoom, and click selection in the Three.js residence scene.
+- Includes subtle panel, pulse, loading, and fan animations.
+- Labels fan and refrigerator states as unavailable because no physical device
+  control API exists.
+- Labels the energy chart as demonstration data because measured energy
+  telemetry is not available.
+
+If the browser has WebGL disabled, the dashboard displays a graceful static
+scene fallback while the live backend controls remain available.
