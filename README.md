@@ -418,13 +418,12 @@ HTTP status: `200 OK`
   the component outputs should not be treated as equivalent.
 - Input validation errors return HTTP `422`.
 
-## Phase 6 dashboard (version 1)
+## Phase 6 dashboard (React + weather)
 
-The `phase-6-v1` branch includes a reference-inspired smart-home dashboard in
+The `phase-6-green-weather-dashboard` branch includes a simple, responsive
+smart-home dashboard in
 [frontend/](/home/dakshhinde/Code/DSL-2/dsl-mini-project/frontend). It uses
-Three.js for the interactive residence scene and connects to the existing
-FastAPI endpoints for backend health, recommendations, and natural-language
-command parsing.
+React, TypeScript, and Vite. The existing FastAPI backend remains separate.
 
 Start the backend first:
 
@@ -433,10 +432,12 @@ source .venv/bin/activate
 python -m uvicorn HEMS.main:app --reload
 ```
 
-In a second terminal, from the repository root, serve the frontend:
+In a second terminal, start the Vite frontend:
 
 ```bash
-python -m http.server 5500 --directory frontend
+cd frontend
+npm install
+npm run dev
 ```
 
 Open:
@@ -445,19 +446,19 @@ Open:
 http://127.0.0.1:5500
 ```
 
+For a production build, run `npm run build` from `frontend/`.
+
 Dashboard behavior:
 
 - Shows the actual backend connection state from `GET /health`.
 - Loads recommendation, occupancy, cooling-demand, and suggested-mode data
   from `POST /recommendation`.
+- Loads estimated outdoor conditions near Shree L. R. Tiwari College of
+  Engineering from Open-Meteo. Weather values are not indoor sensor readings.
 - Sends commands to `POST /commands/parse` and displays the returned intent,
   confidence, and clarification state.
-- Provides orbit, zoom, and click selection in the Three.js residence scene.
-- Includes subtle panel, pulse, loading, and fan animations.
-- Labels fan and refrigerator states as unavailable because no physical device
-  control API exists.
-- Labels the energy chart as demonstration data because measured energy
-  telemetry is not available.
-
-If the browser has WebGL disabled, the dashboard displays a graceful static
-scene fallback while the live backend controls remain available.
+- Supports explicit Live API mode and deterministic Demo mode with four
+  scenarios: Hot Afternoon, Humid Evening, Home Unoccupied, and Comfortable
+  Night.
+- Labels appliance states as unavailable because no physical device-control API
+  exists.
