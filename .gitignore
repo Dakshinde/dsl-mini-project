@@ -64,3 +64,4 @@ mongod.log
 output/
 results/
 data/*.json
+HEMS/__pycache__/
