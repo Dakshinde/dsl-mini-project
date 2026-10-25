@@ -163,20 +163,19 @@ def estimate_occupancy_bayesian(timestamp: str, motion_detected: bool) -> dict:
     p_motion_given_occupied = config.get("p_motion_given_occupied", 0.9)
     p_motion_given_empty = config.get("p_motion_given_empty", 0.05)
     
-    if motion_detected:
-        p_motion = (p_motion_given_occupied * p_occupied) + (p_motion_given_empty * p_empty)
-        if p_motion > 0:
-            p_occupied_given_motion = (p_motion_given_occupied * p_occupied) / p_motion
-        else:
-            p_occupied_given_motion = p_occupied
+    p_motion = (p_motion_given_occupied * p_occupied) + (p_motion_given_empty * p_empty)
+    if p_motion > 0:
+        p_occupied_given_motion = (p_motion_given_occupied * p_occupied) / p_motion
     else:
-        p_no_motion_given_occupied = 1 - p_motion_given_occupied
-        p_no_motion_given_empty = 1 - p_motion_given_empty
-        p_no_motion = (p_no_motion_given_occupied * p_occupied) + (p_no_motion_given_empty * p_empty)
-        if p_no_motion > 0:
-            p_occupied_given_no_motion = (p_no_motion_given_occupied * p_occupied) / p_no_motion
-        else:
-            p_occupied_given_no_motion = p_occupied
+        p_occupied_given_motion = p_occupied
+
+    p_no_motion_given_occupied = 1 - p_motion_given_occupied
+    p_no_motion_given_empty = 1 - p_motion_given_empty
+    p_no_motion = (p_no_motion_given_occupied * p_occupied) + (p_no_motion_given_empty * p_empty)
+    if p_no_motion > 0:
+        p_occupied_given_no_motion = (p_no_motion_given_occupied * p_occupied) / p_no_motion
+    else:
+        p_occupied_given_no_motion = p_occupied
     
     occupancy_percentage = round(
         p_occupied_given_motion * 100 if motion_detected else p_occupied_given_no_motion * 100, 2
