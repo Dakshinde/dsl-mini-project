@@ -462,7 +462,7 @@ function groupBlocks(plans: HourPlan[]): Block[] {
   return blocks;
 }
 
-function Planner() {
+function usePlan() {
   const [forecast, setForecast] = useState<HourForecast[] | null>(null);
   const [plans, setPlans] = useState<HourPlan[] | null>(null);
   const [schedule, setSchedule] = useState<Schedule>("home");
@@ -495,6 +495,12 @@ function Planner() {
     };
   }, [forecast, schedule]);
 
+  return { plans, schedule, setSchedule, error, busy, refresh: () => setReload((n) => n + 1) };
+}
+type PlanState = ReturnType<typeof usePlan>;
+
+function Planner({ plan }: { plan: PlanState }) {
+  const { plans, schedule, setSchedule, error, busy, refresh } = plan;
   const blocks = useMemo(() => (plans ? groupBlocks(plans) : []), [plans]);
   const answered = plans ? plans.filter((p) => p.verdict !== null) : [];
   const differ = answered.filter(
@@ -517,7 +523,7 @@ function Planner() {
               ))}
             </select>
           </label>
-          <button className="btn ghost" onClick={() => setReload((n) => n + 1)}>
+          <button className="btn ghost" onClick={refresh}>
             Refresh forecast
           </button>
         </div>
@@ -581,6 +587,112 @@ function Planner() {
               fuzzy controller in {differ} of {answered.length} hours.
             </p>
           </section>
+        </>
+      )}
+    </>
+  );
+}
+
+/* ---------- Energy ---------- */
+
+const SPREAD = 0.25; // every estimate is shown as +/-25%
+
+function Energy({ plan }: { plan: PlanState }) {
+  const [kw, setKw] = useState(1.5);
+  const [ecoF, setEcoF] = useState(0.5);
+  const [dryF, setDryF] = useState(0.4);
+  const [maxF, setMaxF] = useState(1);
+  const [usualHours, setUsualHours] = useState(8);
+  const [usualMode, setUsualMode] = useState("Max Cool");
+  const [tariff, setTariff] = useState(0);
+
+  const frac: Record<string, number> = { Off: 0, Eco: ecoF, Dry: dryF, "Max Cool": maxF };
+  const plans = plan.plans;
+  const answered = plans ? plans.filter((p) => p.verdict !== null) : [];
+
+  const planKwh = answered.reduce(
+    (sum, p) => sum + kw * (frac[p.verdict?.fuzzy.suggested_mode ?? "Off"] ?? 0),
+    0,
+  );
+  const baseKwh = usualHours * kw * (frac[usualMode] ?? 1);
+  const lo = (v: number) => v * (1 - SPREAD);
+  const hi = (v: number) => v * (1 + SPREAD);
+  const saveMin = lo(baseKwh) - hi(planKwh);
+  const saveMax = hi(baseKwh) - lo(planKwh);
+
+  const range = (a: number, b: number, unit: string) =>
+    `${a.toFixed(1)} to ${b.toFixed(1)} ${unit}`;
+  const money = (kwh: number) => `₹${Math.round(kwh * tariff)}`;
+
+  return (
+    <>
+      <section className="panel">
+        <h3>Your assumptions</h3>
+        <p className="muted">
+          This project has no measured power data, so these numbers are editable guesses. Check your
+          AC&apos;s label or manual, and enter the rate from your electricity bill.
+        </p>
+        <div className="fields">
+          <NumberField label="AC power at full cooling (kW)" value={kw} min={0.5} max={3} step={0.1} onChange={setKw} />
+          <NumberField label="Eco uses this share of full power" value={ecoF} min={0} max={1} step={0.05} onChange={setEcoF} />
+          <NumberField label="Dry uses this share" value={dryF} min={0} max={1} step={0.05} onChange={setDryF} />
+          <NumberField label="Max Cool uses this share" value={maxF} min={0} max={1} step={0.05} onChange={setMaxF} />
+          <NumberField label="Hours you run the AC today" value={usualHours} min={0} max={24} step={1} onChange={setUsualHours} />
+          <label className="field">
+            Mode you usually use
+            <select value={usualMode} onChange={(e) => setUsualMode(e.target.value)}>
+              {["Eco", "Dry", "Max Cool"].map((m) => (
+                <option key={m}>{m}</option>
+              ))}
+            </select>
+          </label>
+          <NumberField label="Electricity rate (₹ per kWh, 0 = not entered)" value={tariff} min={0} max={50} step={0.5} onChange={setTariff} />
+        </div>
+      </section>
+
+      {!plans || answered.length === 0 ? (
+        <div className="alert">
+          Open the Planner tab once the backend is running. The estimate needs the 24-hour plan.
+        </div>
+      ) : (
+        <>
+          <section className="panel">
+            <h3>Estimated use over the next 24 hours</h3>
+            <div className="tiles">
+              <div className="tile">
+                <small>If you follow the plan</small>
+                <div className="big">{range(lo(planKwh), hi(planKwh), "kWh")}</div>
+                {tariff > 0 && <small>{money(lo(planKwh))} to {money(hi(planKwh))}</small>}
+              </div>
+              <div className="tile">
+                <small>Your usual pattern</small>
+                <div className="big">{range(lo(baseKwh), hi(baseKwh), "kWh")}</div>
+                {tariff > 0 && <small>{money(lo(baseKwh))} to {money(hi(baseKwh))}</small>}
+              </div>
+            </div>
+            <p>
+              {saveMax <= 0
+                ? "With these assumptions the plan is not expected to use less than your usual pattern."
+                : saveMin <= 0
+                  ? `The plan might save up to ${saveMax.toFixed(1)} kWh, or it might use slightly more. The ranges overlap, so this is not a clear saving.`
+                  : `Possible saving: ${range(saveMin, saveMax, "kWh")}${tariff > 0 ? ` (${money(saveMin)} to ${money(saveMax)})` : ""} a day, if you follow the plan.`}
+            </p>
+            {tariff > 0 && saveMin > 0 && (
+              <p className="muted">
+                Over 30 similar days: {money(saveMin * 30)} to {money(saveMax * 30)}. Weather changes
+                every day, so treat this as a rough order of magnitude.
+              </p>
+            )}
+            <p className="muted">
+              The plan assumes: {SCHEDULES[plan.schedule].label.toLowerCase()} (change it in the
+              Planner). All ranges are ±{SPREAD * 100}% around your inputs.
+            </p>
+          </section>
+          <div className="alert">
+            These are estimates, not measurements. The plan comes from rules and a model trained on
+            simulated data, and the app cannot switch your AC. Savings only happen if you follow the
+            advice.
+          </div>
         </>
       )}
     </>
@@ -817,8 +929,9 @@ function Lab() {
 /* ---------- shell ---------- */
 
 export default function App() {
-  const [tab, setTab] = useState<"advisor" | "planner" | "lab">("advisor");
+  const [tab, setTab] = useState<"advisor" | "planner" | "energy" | "lab">("advisor");
   const [online, setOnline] = useState<boolean | null>(null);
+  const plan = usePlan();
 
   useEffect(() => {
     void checkHealth().then(setOnline);
@@ -847,12 +960,20 @@ export default function App() {
         <button role="tab" aria-selected={tab === "planner"} onClick={() => setTab("planner")}>
           Planner
         </button>
+        <button role="tab" aria-selected={tab === "energy"} onClick={() => setTab("energy")}>
+          Energy
+        </button>
         <button role="tab" aria-selected={tab === "lab"} onClick={() => setTab("lab")}>
           ML Lab
         </button>
       </nav>
 
-      <main>{tab === "advisor" ? <Advisor /> : tab === "planner" ? <Planner /> : <Lab />}</main>
+      <main>
+        {tab === "advisor" && <Advisor />}
+        {tab === "planner" && <Planner plan={plan} />}
+        {tab === "energy" && <Energy plan={plan} />}
+        {tab === "lab" && <Lab />}
+      </main>
 
       <p className="foot">
         Prototype for decision support. The Random Forest was trained on simulated data, and the
