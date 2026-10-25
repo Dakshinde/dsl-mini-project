@@ -1,283 +1,692 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type { FormEvent, ReactNode } from "react";
-import { estimateOccupancy, getHealth, getRecommendation, getWeather, parseCommand, predictAc, predictFuzzy } from "./api";
-import type { AcPredictionResponse, CommandResponse, FuzzyResponse, OccupancyResponse, RecommendationResponse, ScenarioInputs, ScenarioResult, WeatherData } from "./types";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { checkHealth, clamp, evaluate, fetchMumbaiWeather, periodOf } from "./api";
+import type { Inputs, Verdict } from "./types";
 
-type Mode = "live" | "demo";
-type Scenario = { name: string; temperature: number; humidity: number; occupancy: number };
-const scenarios: Scenario[] = [
-  { name: "Hot Afternoon", temperature: 36, humidity: 58, occupancy: 85 },
-  { name: "Humid Evening", temperature: 31, humidity: 86, occupancy: 70 },
-  { name: "Home Unoccupied", temperature: 29, humidity: 65, occupancy: 10 },
-  { name: "Comfortable Night", temperature: 25, humidity: 55, occupancy: 55 },
+/* ---------- static knowledge taken from the backend audit ---------- */
+
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+const IMPORTANCE = [
+  { name: "Temperature", value: 0.3071 },
+  { name: "Hour of day", value: 0.3066 },
+  { name: "Humidity", value: 0.2772 },
+  { name: "Grid power", value: 0.0996 },
+  { name: "Day of week", value: 0.0073 },
+  { name: "Motion", value: 0.0022 },
 ];
 
-function Panel({ title, action, children }: { title: string; action?: ReactNode; children: ReactNode }) {
-  return <section className="card"><div className="card-heading"><h2>{title}</h2>{action}</div>{children}</section>;
-}
-
-function SourceBadge({ children, tone = "neutral" }: { children: ReactNode; tone?: "live" | "demo" | "neutral" }) {
-  return <span className={`source-badge ${tone}`}>{children}</span>;
-}
-
-function formatValue(value: number | null, suffix = "") {
-  return value === null ? "Unavailable" : `${value.toFixed(value % 1 ? 1 : 0)}${suffix}`;
-}
-
-const defaultScenario: ScenarioInputs = {
-  ambient_temp: 32, relative_humidity: 70, motion_sensor: 1, grid_power: 0.7,
-  hour: 15, day_of_week: 4, occupancy_timestamp: "afternoon",
-  occupancy_motion_detected: true, occupancy_pct: 75,
+type Trap = [number, number, number, number];
+const TEMP_MF: Record<string, Trap> = {
+  low: [15, 15, 20, 24],
+  moderate: [21, 27, 27, 33],
+  high: [29, 35, 35, 40],
+  very_high: [36, 40, 45, 45],
 };
+const HUM_MF: Record<string, Trap> = {
+  low: [0, 0, 25, 40],
+  normal: [30, 50, 50, 70],
+  high: [60, 75, 100, 100],
+};
+const LINE_COLORS = ["#1f5fc4", "#2f7d4f", "#b36b00", "#a23b72"];
 
-function ScenarioInputsForm({ value, onChange }: { value: ScenarioInputs; onChange: (value: ScenarioInputs) => void }) {
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-  return <div className="control-grid">
-    <label>Ambient temperature <output>{value.ambient_temp}°C</output><input type="range" min="15" max="45" value={value.ambient_temp} onChange={(e) => onChange({ ...value, ambient_temp: Number(e.target.value) })} /></label>
-    <label>Relative humidity <output>{value.relative_humidity}%</output><input type="range" min="0" max="100" value={value.relative_humidity} onChange={(e) => onChange({ ...value, relative_humidity: Number(e.target.value) })} /></label>
-    <label>Grid power <output>{value.grid_power.toFixed(2)}</output><input type="range" min="0" max="1" step="0.05" value={value.grid_power} onChange={(e) => onChange({ ...value, grid_power: Number(e.target.value) })} /></label>
-    <label>Hour of day <output>{value.hour}:00</output><input type="range" min="0" max="23" value={value.hour} onChange={(e) => onChange({ ...value, hour: Number(e.target.value) })} /></label>
-    <label>Motion sensor <output>{value.motion_sensor ? "Detected" : "No motion"}</output><select value={value.motion_sensor} onChange={(e) => onChange({ ...value, motion_sensor: Number(e.target.value) as 0 | 1 })}><option value="1">Motion detected</option><option value="0">No motion</option></select></label>
-    <label>Day of week <output>{days[value.day_of_week]}</output><select value={value.day_of_week} onChange={(e) => onChange({ ...value, day_of_week: Number(e.target.value) })}>{days.map((day, index) => <option value={index} key={day}>{day}</option>)}</select></label>
-    <label>Bayesian time period<select value={value.occupancy_timestamp} onChange={(e) => onChange({ ...value, occupancy_timestamp: e.target.value })}><option>morning</option><option>afternoon</option><option>evening</option><option>night</option></select></label>
-    <label>Bayesian motion evidence<select value={String(value.occupancy_motion_detected)} onChange={(e) => onChange({ ...value, occupancy_motion_detected: e.target.value === "true" })}><option value="true">Motion detected</option><option value="false">No motion</option></select></label>
-    <label>Fuzzy occupancy input <output>{value.occupancy_pct}%</output><input type="range" min="0" max="100" value={value.occupancy_pct} onChange={(e) => onChange({ ...value, occupancy_pct: Number(e.target.value) })} /></label>
-  </div>;
+// Training data range, so the Lab can warn about extrapolation.
+const TRAINED = { tMin: 17.45, tMax: 38.86, hMin: 40, hMax: 93.28 };
+
+function mu(x: number, [a, b, c, d]: Trap): number {
+  if (x < a || x > d) return 0;
+  if (x < b) return (x - a) / (b - a);
+  if (x <= c) return 1;
+  return (d - x) / (d - c);
 }
 
-async function runScenario(inputs: ScenarioInputs): Promise<ScenarioResult> {
-  const [randomForest, occupancy, fuzzy, recommendation] = await Promise.all([
-    predictAc({
-      ambient_temp: inputs.ambient_temp, relative_humidity: inputs.relative_humidity,
-      motion_sensor: inputs.motion_sensor, grid_power: inputs.grid_power,
-      hour: inputs.hour, day_of_week: inputs.day_of_week,
-    }),
-    estimateOccupancy(inputs.occupancy_timestamp, inputs.occupancy_motion_detected),
-    predictFuzzy(inputs.ambient_temp, inputs.relative_humidity, inputs.occupancy_pct),
-    getRecommendation(inputs.ambient_temp, inputs.relative_humidity, inputs.occupancy_pct),
-  ]);
-  return { inputs, randomForest, occupancy, fuzzy, recommendation, ranAt: new Date().toLocaleTimeString() };
+function mfData(defs: Record<string, Trap>, min: number, max: number, step: number) {
+  const rows: Record<string, number>[] = [];
+  for (let x = min; x <= max; x += step) {
+    const row: Record<string, number> = { x };
+    for (const k of Object.keys(defs)) row[k] = Number(mu(x, defs[k]).toFixed(3));
+    rows.push(row);
+  }
+  return rows;
 }
 
-function ScenarioResultCards({ result }: { result: ScenarioResult }) {
-  const threshold = result.recommendation.overall_recommendation.ac_mode;
-  const unifiedFuzzy = result.recommendation.overall_recommendation.fuzzy_suggested_mode;
-  const thresholdNote = result.inputs.ambient_temp >= 38
-    ? "The unified endpoint's temperature rule selects Max Cool at 38°C or above."
-    : result.inputs.ambient_temp >= 32
-      ? "The unified endpoint's temperature rule selects Dry from 32°C up to, but not including, 38°C."
-      : result.inputs.ambient_temp >= 25
-        ? "The unified endpoint's temperature rule selects Eco from 25°C up to, but not including, 32°C."
-        : "The unified endpoint's temperature rule selects Off below 25°C.";
-  return <div className="scenario-output">
-    <div className="result-grid">
-    <Panel title="Random Forest prediction" action={<SourceBadge>TRAINED ML · API</SourceBadge>}>
-      <div className="model-result"><strong>{result.randomForest.predicted_mode}</strong><span>Returned probability: {result.randomForest.probability === null ? "Unavailable" : `${(result.randomForest.probability * 100).toFixed(1)}%`}</span></div>
-      <p className="technical-note">The backend returned this class for the six submitted features. No additional feature explanation is claimed.</p>
-    </Panel>
-    <Panel title="Bayesian occupancy estimate" action={<SourceBadge>PROVISIONAL · API</SourceBadge>}>
-      <div className="model-result"><strong>{result.occupancy.occupancy_percentage.toFixed(1)}%</strong><span>{result.occupancy.likely_occupied ? "Likely occupied" : "Likely empty"} · {result.occupancy.time_period}</span></div>
-      <p className="technical-note">{result.occupancy.provisional_note}</p>
-    </Panel>
-    <Panel title="Fuzzy controller" action={<SourceBadge>RULE OUTPUT · API</SourceBadge>}>
-      <div className="model-result"><strong>{result.fuzzy.suggested_mode}</strong><span>Cooling demand: {result.fuzzy.cooling_demand.toFixed(1)}/100</span></div>
-      <p className="technical-note">{result.fuzzy.model_note}</p>
-    </Panel>
-    <Panel title="Unified recommendation" action={<SourceBadge>THRESHOLD + COMPONENTS</SourceBadge>}>
-      <div className="model-result"><strong>{threshold}</strong><span>Backend fuzzy output: {unifiedFuzzy} · Occupancy input: {result.recommendation.overall_recommendation.occupancy_percentage}%</span></div>
-      <p className="technical-note">{result.recommendation.overall_recommendation.ac_disclaimer ?? result.recommendation.disclaimer}</p>
-    </Panel>
-    </div>
-    <Panel title="Why the outputs can disagree" action={<SourceBadge>BACKEND LOGIC</SourceBadge>}>
-      <p className="technical-note">{thresholdNote} That threshold result uses only the submitted temperature.</p>
-      <p className="technical-note">The Random Forest returned <strong>{result.randomForest.predicted_mode}</strong> from its six-feature input vector. The fuzzy controller returned <strong>{result.fuzzy.suggested_mode}</strong> after combining temperature, humidity, and the submitted occupancy input through its membership functions and rules.</p>
-      <p className="technical-note">The Bayesian estimator returned <strong>{result.occupancy.occupancy_percentage.toFixed(1)}%</strong> from the submitted time period and motion evidence. These components have different inputs and purposes, so disagreement is an expected result rather than an error.</p>
-    </Panel>
-  </div>;
-}
+/* ---------- small helpers ---------- */
 
-function scenarioChanges(first: ScenarioInputs, second: ScenarioInputs) {
-  const changes: string[] = [];
-  if (first.ambient_temp !== second.ambient_temp) changes.push(`Temperature: ${first.ambient_temp}°C → ${second.ambient_temp}°C`);
-  if (first.relative_humidity !== second.relative_humidity) changes.push(`Humidity: ${first.relative_humidity}% → ${second.relative_humidity}%`);
-  if (first.motion_sensor !== second.motion_sensor) changes.push(`Random Forest motion: ${first.motion_sensor ? "detected" : "none"} → ${second.motion_sensor ? "detected" : "none"}`);
-  if (first.grid_power !== second.grid_power) changes.push(`Grid power: ${first.grid_power.toFixed(2)} → ${second.grid_power.toFixed(2)}`);
-  if (first.hour !== second.hour) changes.push(`Hour: ${first.hour}:00 → ${second.hour}:00`);
-  if (first.day_of_week !== second.day_of_week) changes.push(`Day: ${first.day_of_week} → ${second.day_of_week}`);
-  if (first.occupancy_pct !== second.occupancy_pct) changes.push(`Fuzzy occupancy input: ${first.occupancy_pct}% → ${second.occupancy_pct}%`);
-  if (first.occupancy_timestamp !== second.occupancy_timestamp || first.occupancy_motion_detected !== second.occupancy_motion_detected) changes.push("Bayesian time or motion evidence changed");
-  return changes;
-}
-
-function ScenarioComparison({ first, second }: { first: ScenarioResult; second: ScenarioResult }) {
-  const changes = scenarioChanges(first.inputs, second.inputs);
-  const rows = [
-    ["Random Forest", first.randomForest.predicted_mode, second.randomForest.predicted_mode],
-    ["RF returned probability", first.randomForest.probability === null ? "Unavailable" : `${(first.randomForest.probability * 100).toFixed(1)}%`, second.randomForest.probability === null ? "Unavailable" : `${(second.randomForest.probability * 100).toFixed(1)}%`],
-    ["Bayesian occupancy", `${first.occupancy.occupancy_percentage.toFixed(1)}%`, `${second.occupancy.occupancy_percentage.toFixed(1)}%`],
-    ["Fuzzy suggestion", first.fuzzy.suggested_mode, second.fuzzy.suggested_mode],
-    ["Fuzzy cooling demand", `${first.fuzzy.cooling_demand.toFixed(1)}/100`, `${second.fuzzy.cooling_demand.toFixed(1)}/100`],
-    ["Threshold recommendation", first.recommendation.overall_recommendation.ac_mode, second.recommendation.overall_recommendation.ac_mode],
-  ];
-  return <Panel title="Scenario A/B comparison" action={<SourceBadge tone="live">TWO API RUNS</SourceBadge>}>
-    <p className="helper-text">This compares returned outputs only. It does not claim energy savings or that one scenario is better.</p>
-    <table className="comparison-table"><thead><tr><th>Output</th><th>Scenario A</th><th>Scenario B</th></tr></thead><tbody>{rows.map(([label, a, b]) => <tr key={label}><th>{label}</th><td><strong>{a}</strong></td><td><strong>{b}</strong></td></tr>)}</tbody></table>
-    <div><strong className="metric-label">Changed inputs</strong>{changes.length ? <ul className="comparison-changes">{changes.map((change) => <li key={change}>{change}</li>)}</ul> : <p className="technical-note">No input differences.</p>}</div>
-  </Panel>;
-}
-
-function AIRecommendations() {
-  const [scenario, setScenario] = useState<ScenarioInputs>(defaultScenario);
-  const [result, setResult] = useState<ScenarioResult | null>(null);
-  const [comparisonScenario, setComparisonScenario] = useState<ScenarioInputs>({ ...defaultScenario, ambient_temp: 38, relative_humidity: 85, motion_sensor: 1, grid_power: 0.9, hour: 18, occupancy_timestamp: "evening", occupancy_pct: 90 });
-  const [comparisonResult, setComparisonResult] = useState<ScenarioResult | null>(null);
-  const [command, setCommand] = useState("turn on the AC");
-  const [commandResult, setCommandResult] = useState<CommandResponse | null>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState("");
-
-  const runModels = async (event: FormEvent) => {
-    event.preventDefault();
-    setBusy(true); setError("");
-    try { setResult(await runScenario(scenario)); }
-    catch { setError("The scenario could not be completed. Check that the backend and model files are available."); }
-    setBusy(false);
-  };
-
-  const runComparison = async (event: FormEvent) => {
-    event.preventDefault();
-    setBusy(true); setError("");
-    try { setComparisonResult(await runScenario(comparisonScenario)); }
-    catch { setError("Scenario B could not be completed. Check that the backend and model files are available."); }
-    setBusy(false);
-  };
-
-  const runNlp = async (event: FormEvent) => {
-    event.preventDefault(); setCommandResult(null); setError("");
-    try { setCommandResult(await parseCommand(command)); }
-    catch { setError("The NLP parser could not be reached."); }
-  };
-
-  return <div className="model-workspace">
-    <div className="workspace-intro"><div><p className="overline">Interactive model laboratory</p><h2>Explore the HEMS intelligence</h2><p>Change inputs, run the backend components, and compare their outputs. These results are recommendations and estimates; they do not control physical appliances.</p></div><SourceBadge tone="live">FASTAPI MODELS</SourceBadge></div>
-    <form onSubmit={runModels}>
-      <Panel title="Interactive scenario inputs" action={<SourceBadge tone="demo">SYNTHETIC INPUTS</SourceBadge>}>
-        <p className="helper-text">These values are submitted to the backend when you run the scenario. They are not live household sensor readings.</p>
-        <ScenarioInputsForm value={scenario} onChange={setScenario} />
-      </Panel>
-      <button className="run-models" type="submit" disabled={busy}>{busy ? "Running scenario…" : "Run scenario"}</button>
-    </form>
-    {result && <><div className="run-summary"><SourceBadge tone="live">LIVE API RESULTS</SourceBadge><span>Completed at {result.ranAt}. Four endpoint responses are shown separately below.</span></div><ScenarioResultCards result={result} /></>}
-    <Panel title="Scenario B" action={<SourceBadge tone="demo">SECOND SYNTHETIC INPUT SET</SourceBadge>}>
-      <p className="helper-text">Use the same controls to create a second API-backed run, then compare it with Scenario A.</p>
-      <form onSubmit={runComparison}><ScenarioInputsForm value={comparisonScenario} onChange={setComparisonScenario} /><button className="run-models" type="submit" disabled={busy}>{busy ? "Running scenario…" : "Run Scenario B"}</button></form>
-    </Panel>
-    {comparisonResult && <><div className="run-summary"><SourceBadge tone="live">SCENARIO B API RESULTS</SourceBadge><span>Completed at {comparisonResult.ranAt}.</span></div><ScenarioResultCards result={comparisonResult} /></>}
-    {result && comparisonResult && <ScenarioComparison first={result} second={comparisonResult} />}
-    <Panel title="NLP command parser" action={<SourceBadge>NLP · rule-based</SourceBadge>}>
-      <p className="helper-text">Try natural language such as “turn on the AC” or “set the AC to dry”. This parses intent and asks for clarification when uncertain; it does not operate hardware.</p>
-      <form className="command-form" onSubmit={runNlp}><input value={command} onChange={(e) => setCommand(e.target.value)} /><button type="submit">Parse command</button></form>
-      {commandResult && <div className="nlp-result"><strong>{commandResult.intent}</strong><span>{commandResult.message}</span><span>Appliance: {commandResult.appliance ?? "Not identified"} · Action: {commandResult.action ?? "Not identified"} · Confidence: {(commandResult.confidence * 100).toFixed(0)}%</span><SourceBadge tone={commandResult.needs_clarification ? "demo" : "live"}>{commandResult.needs_clarification ? "CLARIFICATION NEEDED" : "PARSED"}</SourceBadge></div>}
-    </Panel>
-    {error && <div className="state-message error">{error}</div>}
-  </div>;
-}
-
-function UtilityView({ tab }: { tab: string }) {
-  const content: Record<string, { title: string; text: string; items: string[] }> = {
-    Devices: { title: "Connected devices", text: "This project currently has recommendation inputs, not hardware telemetry or control connections.", items: ["Air Conditioner · Recommendation available · Hardware state not connected", "Refrigerator · No sensor integration configured", "Ceiling Fan · No sensor integration configured"] },
-    Energy: { title: "Energy insights", text: "Measured energy telemetry is not connected yet. Grid power is currently an input feature for the Random Forest experiment, not a live energy meter.", items: ["Live consumption: Not available", "Energy savings: Not calculated", "Next step: connect a smart meter or load sensor"] },
-    "System Status": { title: "System status", text: "Use this page to distinguish service availability from model availability.", items: ["FastAPI backend · Check the LIVE API badge", "Random Forest file · Used by POST /predict/ac", "Open-Meteo · Outdoor forecast provider", "NLP parser · Rule-based and available through POST /commands/parse"] },
-    Settings: { title: "Dashboard settings", text: "Model inputs are intentionally changed from the AI Recommendations tab so every experiment is visible and reproducible.", items: ["API base URL: VITE_HEMS_API_URL", "Weather refresh: Every 15 minutes", "Physical control: Disabled until device integrations are added"] },
-  };
-  const view = content[tab];
-  return <Panel title={view.title}><p className="utility-intro">{view.text}</p><div className="utility-list">{view.items.map((item) => <div key={item}><i className="activity-dot good" />{item}</div>)}</div></Panel>;
-}
-
-export function App() {
-  const [mode, setMode] = useState<Mode>("live");
-  const [scenario, setScenario] = useState(scenarios[0]);
-  const [online, setOnline] = useState(false);
+function useVerdict(inputs: Inputs, delay = 300) {
+  const [verdict, setVerdict] = useState<Verdict | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [weather, setWeather] = useState<(WeatherData & { description: string }) | null>(null);
-  const [weatherLoading, setWeatherLoading] = useState(true);
-  const [weatherError, setWeatherError] = useState("");
-  const [recommendation, setRecommendation] = useState<RecommendationResponse | null>(null);
-  const [activity, setActivity] = useState(["Dashboard ready"]);
-  const [command, setCommand] = useState("");
-  const [commandResult, setCommandResult] = useState<CommandResponse | null>(null);
-  const [commandError, setCommandError] = useState("");
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const [activeNav, setActiveNav] = useState("Dashboard");
 
-  const indoor = mode === "demo"
-    ? scenario
-    : { temperature: 32, humidity: 70, occupancy: 90 };
-  const addActivity = useCallback((message: string) => setActivity((items) => [message, ...items].slice(0, 5)), []);
-
-  const refreshWeather = useCallback(async () => {
-    setWeatherLoading(true);
-    setWeatherError("");
-    try { setWeather(await getWeather()); addActivity("Outdoor weather updated"); }
-    catch { setWeatherError("Weather service is unavailable. Indoor HEMS data is unaffected."); }
-    finally { setWeatherLoading(false); }
-  }, [addActivity]);
-
-  const refreshHems = useCallback(async () => {
-    if (loading) return;
-    setLoading(true);
-    try {
-      await getHealth();
-      const result = await getRecommendation(indoor.temperature, indoor.humidity, indoor.occupancy ?? 90);
-      setRecommendation(result);
-      setOnline(true);
-      addActivity("HEMS recommendation updated");
-    } catch { setOnline(false); addActivity("HEMS backend unavailable"); }
-    finally { setLoading(false); }
-  }, [addActivity, indoor.humidity, indoor.occupancy, indoor.temperature]);
-
-  useEffect(() => { void refreshWeather(); }, [refreshWeather]);
-  useEffect(() => { void refreshHems(); }, [refreshHems]);
   useEffect(() => {
-    const timer = window.setInterval(() => { void refreshWeather(); }, 15 * 60 * 1000);
-    return () => window.clearInterval(timer);
-  }, [refreshWeather]);
+    let cancelled = false;
+    setLoading(true);
+    const id = window.setTimeout(() => {
+      evaluate(inputs)
+        .then((v) => {
+          if (cancelled) return;
+          setVerdict(v);
+          setError(null);
+        })
+        .catch((e: unknown) => {
+          if (!cancelled) setError(e instanceof Error ? e.message : "Request failed");
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+    }, delay);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(id);
+    };
+  }, [inputs, delay]);
 
-  const fuzzy = recommendation?.component_outputs.find((item) => item.component === "fuzzy_logic_controller")?.output;
-  const acMode = recommendation?.overall_recommendation.ac_mode ?? "Unavailable";
-  const fuzzyMode = fuzzy?.suggested_mode ?? "Unavailable";
-  const explanation = useMemo(() => {
-    if (!recommendation) return "Run a refresh when the HEMS backend is available.";
-    if (acMode !== fuzzyMode) return `The temperature-based recommendation is ${acMode}, while the fuzzy controller suggests ${fuzzyMode}. HEMS keeps both outputs visible instead of hiding the disagreement.`;
-    return `Both recommendation paths suggest ${acMode} for the available home conditions. This is decision support only; no physical appliance command was sent.`;
-  }, [acMode, fuzzyMode, recommendation]);
+  return { verdict, error, loading };
+}
 
-  const submitCommand = async (event: FormEvent) => {
-    event.preventDefault();
-    if (!command.trim()) return;
-    setCommandError(""); setCommandResult(null);
-    try { const result = await parseCommand(command.trim()); setCommandResult(result); addActivity(`Command parsed · ${result.intent}`); }
-    catch { setCommandError("Unable to parse. Check that the backend is running."); }
+function Chip({ mode }: { mode: string }) {
+  return (
+    <span className="chip" data-mode={mode}>
+      {mode}
+    </span>
+  );
+}
+
+function reasonFor(v: Verdict, i: Inputs): string {
+  const t = i.temp.toFixed(1);
+  const h = Math.round(i.humidity);
+  const d = v.fuzzy.cooling_demand.toFixed(0);
+  const occ = Math.round(v.occ.occupancy_percentage);
+  switch (v.fuzzy.suggested_mode) {
+    case "Off":
+      return `Cooling demand is only ${d} out of 100 at ${t}°C, and there is about a ${occ}% chance someone is in the room. Leaving the AC off saves the most power.`;
+    case "Dry":
+      return `At ${t}°C the air feels heavy mostly because of the ${h}% humidity. Dry mode removes moisture without overcooling the room.`;
+    case "Max Cool":
+      return `It is ${t}°C with a cooling demand of ${d} out of 100 and about a ${occ}% chance the room is occupied. This is hot enough that full cooling is justified.`;
+    default:
+      return `It is warm (${t}°C) and cooling demand is ${d} out of 100, but not high enough for full cooling. Eco mode keeps the room comfortable with less power.`;
+  }
+}
+
+/* ---------- feedback (browser storage, exported as CSV) ---------- */
+
+const FB_KEY = "hems-feedback";
+interface FeedbackRow {
+  time: string;
+  temp: number;
+  humidity: number;
+  motion: boolean;
+  grid: boolean;
+  hour: number;
+  dow: number;
+  fuzzy: string;
+  rf: string;
+  rule: string;
+  helpful: boolean;
+}
+
+function readFeedback(): FeedbackRow[] {
+  try {
+    return JSON.parse(localStorage.getItem(FB_KEY) ?? "[]") as FeedbackRow[];
+  } catch {
+    return [];
+  }
+}
+
+function saveFeedback(row: FeedbackRow): number {
+  const all = [...readFeedback(), row];
+  try {
+    localStorage.setItem(FB_KEY, JSON.stringify(all));
+  } catch {
+    /* storage unavailable: feedback is simply not kept */
+  }
+  return all.length;
+}
+
+function downloadFeedbackCsv() {
+  const rows = readFeedback();
+  if (rows.length === 0) return;
+  const head = Object.keys(rows[0]).join(",");
+  const body = rows.map((r) => Object.values(r).join(",")).join("\n");
+  const url = URL.createObjectURL(new Blob([`${head}\n${body}`], { type: "text/csv" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "hems-feedback.csv";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function Feedback({ verdict, inputs }: { verdict: Verdict; inputs: Inputs }) {
+  const [count, setCount] = useState<number | null>(null);
+
+  useEffect(() => setCount(null), [verdict]);
+
+  const send = (helpful: boolean) =>
+    setCount(
+      saveFeedback({
+        time: new Date().toISOString(),
+        temp: inputs.temp,
+        humidity: inputs.humidity,
+        motion: inputs.motion,
+        grid: inputs.grid,
+        hour: inputs.hour,
+        dow: inputs.dow,
+        fuzzy: verdict.fuzzy.suggested_mode,
+        rf: verdict.rf.predicted_mode,
+        rule: verdict.rule,
+        helpful,
+      }),
+    );
+
+  return (
+    <div className="panel">
+      <h3>Was this advice helpful?</h3>
+      {count === null ? (
+        <div className="row">
+          <button className="btn" onClick={() => send(true)}>
+            Yes, helpful
+          </button>
+          <button className="btn ghost" onClick={() => send(false)}>
+            No, not helpful
+          </button>
+        </div>
+      ) : (
+        <div className="row">
+          <span>Saved on this device. {count} answer{count === 1 ? "" : "s"} so far.</span>
+          <button className="btn ghost" onClick={downloadFeedbackCsv}>
+            Download feedback CSV
+          </button>
+        </div>
+      )}
+      <p className="muted">
+        Real answers like these are the start of a non-synthetic dataset for retraining.
+      </p>
+    </div>
+  );
+}
+
+/* ---------- constrained number input ---------- */
+
+/**
+ * Only in-range numbers reach the app state while typing; anything else is
+ * flagged, and the value snaps to the nearest allowed number on blur.
+ */
+function NumberField({
+  label,
+  value,
+  min,
+  max,
+  step,
+  onChange,
+}: {
+  label: string;
+  value: number;
+  min: number;
+  max: number;
+  step: number;
+  onChange: (v: number) => void;
+}) {
+  const [draft, setDraft] = useState(String(value));
+  const [focused, setFocused] = useState(false);
+
+  useEffect(() => {
+    if (!focused) setDraft(String(value));
+  }, [value, focused]);
+
+  const parsed = Number(draft);
+  const valid = draft.trim() !== "" && Number.isFinite(parsed) && parsed >= min && parsed <= max;
+
+  return (
+    <label className="field">
+      {label}
+      <input
+        type="number"
+        inputMode="decimal"
+        min={min}
+        max={max}
+        step={step}
+        value={draft}
+        aria-invalid={!valid}
+        onFocus={() => setFocused(true)}
+        onChange={(e) => {
+          const text = e.target.value.slice(0, 6);
+          setDraft(text);
+          const v = Number(text);
+          if (text.trim() !== "" && Number.isFinite(v) && v >= min && v <= max) onChange(v);
+        }}
+        onBlur={() => {
+          setFocused(false);
+          const fixed =
+            draft.trim() === "" || !Number.isFinite(parsed) ? value : clamp(parsed, min, max);
+          onChange(fixed);
+          setDraft(String(fixed));
+        }}
+      />
+      <small className={valid ? "hint" : "hint bad"}>
+        {valid ? `Allowed: ${min} to ${max}` : `Enter a number from ${min} to ${max}`}
+      </small>
+    </label>
+  );
+}
+
+/* ---------- Advisor ---------- */
+
+function Advisor() {
+  const now = useMemo(() => new Date(), []);
+  const [temp, setTemp] = useState(30);
+  const [humidity, setHumidity] = useState(70);
+  const [motion, setMotion] = useState(true);
+  const [grid, setGrid] = useState(true);
+  const [weatherNote, setWeatherNote] = useState("Loading Mumbai weather…");
+
+  const loadWeather = async () => {
+    setWeatherNote("Loading Mumbai weather…");
+    try {
+      const w = await fetchMumbaiWeather();
+      setTemp(clamp(Number(w.temp.toFixed(1)), 15, 45));
+      setHumidity(clamp(Math.round(w.humidity), 0, 100));
+      setWeatherNote("Live outdoor weather in Mumbai (Open-Meteo)");
+    } catch {
+      setWeatherNote("Weather unavailable. Enter the values by hand.");
+    }
   };
 
-  return <main className="app-shell">
-    <aside className="sidebar">
-      <div className="brand"><span className="brand-mark">H</span><div><strong>HEMS</strong><small>Cognitive Smart Home</small></div></div>
-      <nav aria-label="Main navigation">{["Dashboard", "Devices", "Energy", "AI Recommendations", "System Status", "Settings"].map((item) => <button className={activeNav === item ? "nav-item active" : "nav-item"} key={item} onClick={() => setActiveNav(item)}><span>{["⌂", "◈", "↗", "✦", "●", "⚙"][["Dashboard", "Devices", "Energy", "AI Recommendations", "System Status", "Settings"].indexOf(item)]}</span>{item}</button>)}</nav>
-      <div className="sidebar-footer"><SourceBadge tone={online ? "live" : "neutral"}>{online ? "LIVE API" : "API OFFLINE"}</SourceBadge><small>Backend status</small></div>
-    </aside>
-    <div className="content">
-      <header className="page-header"><div><p className="overline">{new Intl.DateTimeFormat([], { weekday: "long", month: "long", day: "numeric" }).format(new Date())}</p><h1>{new Date().getHours() < 12 ? "Good morning" : new Date().getHours() < 18 ? "Good afternoon" : "Good evening"}, Daksh</h1><p className="subtitle">Here is what's happening in your smart home.</p></div><div className="header-actions"><SourceBadge tone={mode === "live" ? "live" : "demo"}>{mode === "live" ? "LIVE API MODE" : "DEMO MODE"}</SourceBadge><button className="refresh-button" onClick={() => { void refreshWeather(); void refreshHems(); }} disabled={loading || weatherLoading}>{loading || weatherLoading ? "Refreshing…" : "Refresh data"}</button></div></header>
-      <div className="mode-switch" role="group" aria-label="Data mode"><button className={mode === "live" ? "selected" : ""} onClick={() => setMode("live")}>Live API mode</button><button className={mode === "demo" ? "selected" : ""} onClick={() => setMode("demo")}>Demo mode</button>{mode === "demo" && <select aria-label="Demo scenario" value={scenario.name} onChange={(event) => setScenario(scenarios.find((item) => item.name === event.target.value) ?? scenarios[0])}>{scenarios.map((item) => <option key={item.name}>{item.name}</option>)}</select>}</div>
-      {activeNav === "AI Recommendations" ? <AIRecommendations /> : activeNav !== "Dashboard" ? <UtilityView tab={activeNav} /> : <div className="dashboard-columns">
-        <div className="main-column">
-          <Panel title="Outdoor weather" action={<SourceBadge>Open-Meteo estimate</SourceBadge>}><div className="location">Shree L. R. Tiwari College of Engineering, Mira Road</div>{weatherLoading ? <div className="state-message">Loading local forecast…</div> : weatherError ? <div className="state-message error">{weatherError}</div> : weather && <div className="weather-grid"><div className="weather-temperature"><strong>{formatValue(weather.temperature, "°C")}</strong><span>{weather.description}</span><small>Feels like {formatValue(weather.apparentTemperature, "°C")}</small></div><div><span className="metric-label">Humidity</span><strong>{formatValue(weather.humidity, "%")}</strong></div><div><span className="metric-label">Wind</span><strong>{formatValue(weather.windSpeed, " km/h")}</strong></div><div><span className="metric-label">Today</span><strong>{formatValue(weather.high, "°")} / {formatValue(weather.low, "°")}</strong></div></div>}<p className="data-note">Provider forecast for this location, not an indoor sensor reading. {weather && `Last updated ${weather.updatedAt}.`}</p></Panel>
-          <Panel title="Home overview" action={<SourceBadge tone={mode === "demo" ? "demo" : "neutral"}>{mode === "demo" ? "Synthetic indoor values" : "Backend + inputs"}</SourceBadge>}><div className="overview-grid"><div><span className="metric-label">Indoor temperature</span><strong>{formatValue(indoor.temperature, "°C")}</strong><small>{mode === "demo" ? "Demo scenario" : "Configured input"}</small></div><div><span className="metric-label">Indoor humidity</span><strong>{formatValue(indoor.humidity, "%")}</strong><small>{mode === "demo" ? "Demo scenario" : "Configured input"}</small></div><div><span className="metric-label">Occupancy estimate</span><strong>{formatValue(indoor.occupancy, "%")}</strong><small>Model estimate</small></div><div><span className="metric-label">AC recommendation</span><strong>{acMode}</strong><small>Recommendation only</small></div></div></Panel>
-          <Panel title="Appliances" action={<span className="muted">Software integration status</span>}><p className="helper-text">“Not connected” means the dashboard has no sensor, smart-plug, or control API for that appliance. It is not a prediction failure.</p><div className="appliance-grid">{[["⌁", "Air Conditioner", acMode, "Recommendation only · no hardware command"], ["▥", "Refrigerator", "Not connected", "Add refrigerator telemetry or a smart-plug API to show its live state"], ["✣", "Ceiling Fan", "Not connected", "Add fan telemetry or a control API to show its live state"]].map(([icon, name, value, note]) => <article className="appliance-card" key={name}><span className="appliance-icon">{icon}</span><div><h3>{name}</h3><p>{note}</p></div><strong className={value === "Not connected" ? "unavailable" : ""}>{value}</strong></article>)}</div></Panel>
-          <Panel title="AI command center" action={<SourceBadge>NLP parser</SourceBadge>}><form className="command-form" onSubmit={submitCommand}><input value={command} onChange={(event) => setCommand(event.target.value)} placeholder="Try “turn on the AC”" /><button type="submit">Parse command</button></form><div className="command-result" role="status">{commandError || (commandResult ? <><strong>{commandResult.intent} · {commandResult.message}</strong><span>Confidence {(commandResult.confidence * 100).toFixed(0)}% · {commandResult.needs_clarification ? "Clarification needed" : "Recommendation only"}</span></> : "Commands are parsed for demonstration; they do not control physical devices.")}</div></Panel>
+  useEffect(() => {
+    void loadWeather();
+  }, []);
+
+  const inputs = useMemo<Inputs>(
+    () => ({
+      temp,
+      humidity,
+      motion,
+      grid,
+      hour: now.getHours(),
+      dow: (now.getDay() + 6) % 7,
+    }),
+    [temp, humidity, motion, grid, now],
+  );
+
+  const { verdict, error, loading } = useVerdict(inputs);
+  const modes = verdict
+    ? [verdict.fuzzy.suggested_mode, verdict.rf.predicted_mode, verdict.rule]
+    : [];
+  const agree = modes.length > 0 && modes.every((m) => m === modes[0]);
+
+  return (
+    <>
+      <section className="panel">
+        <h3>Your room right now</h3>
+        <div className="fields">
+          <NumberField
+            label="Temperature (°C)"
+            value={temp}
+            min={15}
+            max={45}
+            step={0.5}
+            onChange={setTemp}
+          />
+          <NumberField
+            label="Humidity (%)"
+            value={humidity}
+            min={0}
+            max={100}
+            step={1}
+            onChange={setHumidity}
+          />
+          <label className="field check">
+            <input type="checkbox" checked={motion} onChange={(e) => setMotion(e.target.checked)} />
+            Someone is moving in the room
+          </label>
+          <label className="field check">
+            <input type="checkbox" checked={grid} onChange={(e) => setGrid(e.target.checked)} />
+            Grid power is on
+          </label>
         </div>
-        <aside className="intelligence-column"><Panel title="HEMS intelligence" action={<SourceBadge tone="live">BACKEND</SourceBadge>}><div className="recommendation-hero"><span>Recommended AC mode</span><strong>{fuzzyMode}</strong><p>{explanation}</p></div><div className="intelligence-row"><span>Occupancy estimate</span><strong>{formatValue(indoor.occupancy, "%")}</strong></div><div className="intelligence-row"><span>Temperature-based model</span><strong>{acMode}</strong></div><div className="intelligence-row"><span>Cooling demand</span><strong>{fuzzy?.cooling_demand === undefined ? "Unavailable" : `${fuzzy.cooling_demand}/100`}</strong></div><button className="details-button" onClick={() => setDetailsOpen(!detailsOpen)}>{detailsOpen ? "Hide technical details" : "Show technical details"} <span>{detailsOpen ? "−" : "+"}</span></button>{detailsOpen && <div className="technical-details"><p>Outputs remain distinct: the temperature-based mode is not the fuzzy recommendation, and the occupancy estimate is provisional.</p><p>Disclaimer: {recommendation?.disclaimer ?? "Unavailable until the backend responds."}</p></div>}</Panel><Panel title="System activity"><div className="activity-list">{activity.map((item, index) => <div className="activity-item" key={`${item}-${index}`}><i className={index === 0 ? "activity-dot good" : "activity-dot"} />{item}<small>Just now</small></div>)}</div></Panel></aside>
-      </div>}
+        <div className="row" style={{ marginTop: 12 }}>
+          <button className="btn ghost" onClick={() => void loadWeather()}>
+            Refresh weather
+          </button>
+          <span className="muted">
+            {weatherNote}. Outdoor values stand in for your room until you add a sensor.
+          </span>
+        </div>
+      </section>
+
+      {error && (
+        <div className="alert bad" role="alert">
+          Could not reach the backend. Start it with{" "}
+          <code>python -m uvicorn HEMS.main:app --port 8000</code>. Details: {error}
+        </div>
+      )}
+
+      {verdict && (
+        <>
+          <section className="verdict" data-mode={verdict.fuzzy.suggested_mode} aria-busy={loading}>
+            <h2>
+              {verdict.fuzzy.suggested_mode === "Off"
+                ? "Keep the AC off"
+                : `Run ${verdict.fuzzy.suggested_mode} mode`}
+            </h2>
+            <p>{reasonFor(verdict, inputs)}</p>
+          </section>
+
+          <div className="opinions">
+            <div className="op">
+              <small>Fuzzy controller (main advice)</small>
+              <Chip mode={verdict.fuzzy.suggested_mode} />
+              <small>Demand {verdict.fuzzy.cooling_demand.toFixed(0)} / 100</small>
+            </div>
+            <div className="op">
+              <small>Random Forest (second opinion)</small>
+              <Chip mode={verdict.rf.predicted_mode} />
+              <small>
+                {verdict.rf.probability !== null
+                  ? `${Math.round(verdict.rf.probability * 100)}% confident`
+                  : "confidence not available"}
+              </small>
+            </div>
+            <div className="op">
+              <small>Simple temperature rule</small>
+              <Chip mode={verdict.rule} />
+              <small>Uses temperature only</small>
+            </div>
+          </div>
+
+          <div className={agree ? "alert agree" : "alert"}>
+            {agree
+              ? "All three methods agree."
+              : "The methods disagree because they look at different things. The fuzzy controller weighs temperature, humidity and how likely the room is occupied. The Random Forest also uses the time of day and grid power, learned from simulated data. Treat the fuzzy result as the main advice."}
+          </div>
+
+          <Feedback verdict={verdict} inputs={inputs} />
+        </>
+      )}
+    </>
+  );
+}
+
+/* ---------- Lab ---------- */
+
+function MfChart({
+  title,
+  defs,
+  min,
+  max,
+  step,
+  current,
+  unit,
+}: {
+  title: string;
+  defs: Record<string, Trap>;
+  min: number;
+  max: number;
+  step: number;
+  current: number;
+  unit: string;
+}) {
+  const data = useMemo(() => mfData(defs, min, max, step), [defs, min, max, step]);
+  return (
+    <div className="panel">
+      <h3>{title}</h3>
+      <ResponsiveContainer width="100%" height={220}>
+        <LineChart data={data} margin={{ top: 8, right: 12, bottom: 4, left: 0 }}>
+          <CartesianGrid stroke="#d6e0de" strokeDasharray="3 3" />
+          <XAxis dataKey="x" type="number" domain={[min, max]} unit={unit} />
+          <YAxis domain={[0, 1]} width={32} />
+          <Tooltip />
+          <Legend />
+          <ReferenceLine x={current} stroke="#0f2027" strokeWidth={2} />
+          {Object.keys(defs).map((k, idx) => (
+            <Line
+              key={k}
+              dataKey={k}
+              dot={false}
+              stroke={LINE_COLORS[idx % LINE_COLORS.length]}
+              strokeWidth={2}
+              isAnimationActive={false}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
     </div>
-  </main>;
+  );
+}
+
+function Lab() {
+  const [inputs, setInputs] = useState<Inputs>({
+    temp: 32,
+    humidity: 70,
+    motion: true,
+    grid: true,
+    hour: 14,
+    dow: 3,
+  });
+  const set = <K extends keyof Inputs>(k: K, v: Inputs[K]) =>
+    setInputs((p) => ({ ...p, [k]: v }));
+
+  const { verdict, error } = useVerdict(inputs, 250);
+  const outside =
+    inputs.temp < TRAINED.tMin ||
+    inputs.temp > TRAINED.tMax ||
+    inputs.humidity < TRAINED.hMin ||
+    inputs.humidity > TRAINED.hMax;
+  const modes = verdict
+    ? [verdict.fuzzy.suggested_mode, verdict.rf.predicted_mode, verdict.rule]
+    : [];
+  const agree = modes.length > 0 && modes.every((m) => m === modes[0]);
+
+  return (
+    <div className="lab">
+      <section className="panel">
+        <h3>Inputs</h3>
+        <div className="fields" style={{ gridTemplateColumns: "1fr" }}>
+          <label className="field">
+            Temperature: {inputs.temp.toFixed(1)} °C
+            <input
+              type="range"
+              min={15}
+              max={45}
+              step={0.5}
+              value={inputs.temp}
+              onChange={(e) => set("temp", Number(e.target.value))}
+            />
+          </label>
+          <label className="field">
+            Humidity: {inputs.humidity}%
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={inputs.humidity}
+              onChange={(e) => set("humidity", Number(e.target.value))}
+            />
+          </label>
+          <label className="field">
+            Hour: {inputs.hour}:00 ({periodOf(inputs.hour)})
+            <input
+              type="range"
+              min={0}
+              max={23}
+              value={inputs.hour}
+              onChange={(e) => set("hour", Number(e.target.value))}
+            />
+          </label>
+          <label className="field">
+            Day of week
+            <select value={inputs.dow} onChange={(e) => set("dow", Number(e.target.value))}>
+              {DAYS.map((d, idx) => (
+                <option key={d} value={idx}>
+                  {d}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="field check">
+            <input
+              type="checkbox"
+              checked={inputs.motion}
+              onChange={(e) => set("motion", e.target.checked)}
+            />
+            Motion detected
+          </label>
+          <label className="field check">
+            <input
+              type="checkbox"
+              checked={inputs.grid}
+              onChange={(e) => set("grid", e.target.checked)}
+            />
+            Grid power on
+          </label>
+        </div>
+      </section>
+
+      <div>
+        {error && (
+          <div className="alert bad" role="alert">
+            Backend error: {error}
+          </div>
+        )}
+        {outside && (
+          <div className="alert">
+            These values are outside the data the Random Forest was trained on (
+            {TRAINED.tMin}–{TRAINED.tMax} °C, {TRAINED.hMin}–{Math.round(TRAINED.hMax)}% humidity), so
+            its answer is an extrapolation.
+          </div>
+        )}
+        {verdict && (
+          <>
+            <div className={agree ? "alert agree" : "alert"}>
+              {agree
+                ? "All three methods agree on this input."
+                : "The methods disagree on this input. Move the sliders to find where they switch."}
+            </div>
+            <div className="tiles">
+              <div className="tile" data-mode={verdict.rf.predicted_mode}>
+                <small>Random Forest</small>
+                <div className="big">{verdict.rf.predicted_mode}</div>
+                <small>
+                  Class {verdict.rf.predicted_mode_code}
+                  {verdict.rf.probability !== null &&
+                    `, ${Math.round(verdict.rf.probability * 100)}% of trees agree`}
+                </small>
+              </div>
+              <div className="tile" data-mode={verdict.fuzzy.suggested_mode}>
+                <small>Fuzzy controller</small>
+                <div className="big">{verdict.fuzzy.suggested_mode}</div>
+                <small>Cooling demand {verdict.fuzzy.cooling_demand.toFixed(1)} / 100</small>
+              </div>
+              <div className="tile">
+                <small>Bayesian occupancy ({verdict.occ.time_period})</small>
+                <div className="big">{verdict.occ.occupancy_percentage.toFixed(1)}%</div>
+                <small>
+                  {verdict.occ.likely_occupied ? "Likely occupied" : "Likely empty"}. Illustrative
+                  probabilities.
+                </small>
+              </div>
+              <div className="tile" data-mode={verdict.rule}>
+                <small>Temperature rule</small>
+                <div className="big">{verdict.rule}</div>
+                <small>Below 25 Off, 25–32 Eco, 32–38 Dry, 38+ Max Cool</small>
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className="panel">
+          <h3>What the Random Forest pays attention to</h3>
+          <ResponsiveContainer width="100%" height={230}>
+            <BarChart data={IMPORTANCE} layout="vertical" margin={{ left: 20, right: 16 }}>
+              <CartesianGrid stroke="#d6e0de" strokeDasharray="3 3" />
+              <XAxis type="number" domain={[0, 0.35]} />
+              <YAxis type="category" dataKey="name" width={100} />
+              <Tooltip />
+              <Bar dataKey="value" fill="#0e5a64" isAnimationActive={false} />
+            </BarChart>
+          </ResponsiveContainer>
+          <p className="muted">
+            Hour of day matters as much as temperature. That reflects how the simulated training
+            data was built, not a proven real-world effect.
+          </p>
+        </div>
+
+        <MfChart
+          title="Fuzzy temperature sets (black line = your input)"
+          defs={TEMP_MF}
+          min={15}
+          max={45}
+          step={0.5}
+          current={inputs.temp}
+          unit="°"
+        />
+        <MfChart
+          title="Fuzzy humidity sets"
+          defs={HUM_MF}
+          min={0}
+          max={100}
+          step={1}
+          current={inputs.humidity}
+          unit="%"
+        />
+      </div>
+    </div>
+  );
+}
+
+/* ---------- shell ---------- */
+
+export default function App() {
+  const [tab, setTab] = useState<"advisor" | "lab">("advisor");
+  const [online, setOnline] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    void checkHealth().then(setOnline);
+  }, []);
+
+  return (
+    <div className="shell">
+      <header className="top">
+        <div className="brand">
+          <h1>HEMS AC Advisor</h1>
+          <p>Comfort without wasted electricity, for humid cities</p>
+        </div>
+        <span className={online === false ? "status bad" : "status"}>
+          {online === null
+            ? "Checking backend…"
+            : online
+              ? "Backend connected"
+              : "Backend not reachable"}
+        </span>
+      </header>
+
+      <nav className="tabs" role="tablist" aria-label="Sections">
+        <button role="tab" aria-selected={tab === "advisor"} onClick={() => setTab("advisor")}>
+          Advisor
+        </button>
+        <button role="tab" aria-selected={tab === "lab"} onClick={() => setTab("lab")}>
+          ML Lab
+        </button>
+      </nav>
+
+      <main>{tab === "advisor" ? <Advisor /> : <Lab />}</main>
+
+      <p className="foot">
+        Prototype for decision support. The Random Forest was trained on simulated data, and the
+        fuzzy rules and occupancy probabilities are unvalidated estimates. This app gives advice
+        only; it does not control any appliance, and energy savings have not been measured.
+      </p>
+    </div>
+  );
 }

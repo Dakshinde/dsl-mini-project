@@ -1,79 +1,104 @@
 import type {
-  AcPredictionResponse, CommandResponse, FuzzyResponse, OccupancyResponse,
-  RecommendationResponse, WeatherData,
+  FuzzyResponse,
+  Inputs,
+  Mode,
+  OccResponse,
+  RfResponse,
+  Verdict,
 } from "./types";
 
-const API_BASE = import.meta.env.VITE_HEMS_API_URL ?? "http://127.0.0.1:8000";
+const API_BASE: string =
+  import.meta.env.VITE_HEMS_API_URL ?? "http://127.0.0.1:8000";
 
-async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE}${path}`, init);
-  if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-  return response.json() as Promise<T>;
+export const clamp = (v: number, lo: number, hi: number): number =>
+  Math.min(hi, Math.max(lo, Number.isFinite(v) ? v : lo));
+
+/** The backend matches period words, not clock times, so send words. */
+export function periodOf(hour: number): string {
+  if (hour >= 5 && hour <= 11) return "morning";
+  if (hour >= 12 && hour <= 16) return "afternoon";
+  if (hour >= 17 && hour <= 20) return "evening";
+  return "night";
 }
 
-export const getHealth = () => request<{ status: string }>("/health");
-export const getRecommendation = (temperature: number, humidity: number, occupancy: number) =>
-  request<RecommendationResponse>("/recommendation", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ temperature_c: temperature, humidity_pct: humidity, occupancy_pct: occupancy }),
+/** Same thresholds the backend's /recommendation endpoint uses (temperature only). */
+export function ruleMode(tempC: number): Mode {
+  if (tempC >= 38) return "Max Cool";
+  if (tempC >= 32) return "Dry";
+  if (tempC >= 25) return "Eco";
+  return "Off";
+}
+
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
   });
-export const parseCommand = (command: string) => request<CommandResponse>("/commands/parse", {
-  method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ command }),
-});
-export const predictAc = (input: {
-  ambient_temp: number; relative_humidity: number; motion_sensor: number;
-  grid_power: number; hour: number; day_of_week: number;
-}) => request<AcPredictionResponse>("/predict/ac", {
-  method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input),
-});
-export const estimateOccupancy = (timestamp: string, motion_detected: boolean) =>
-  request<OccupancyResponse>("/occupancy/estimate", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ timestamp, motion_detected }),
-  });
-export const predictFuzzy = (temperature_c: number, humidity_pct: number, occupancy_pct: number) =>
-  request<FuzzyResponse>("/control/fuzzy", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ temperature_c, humidity_pct, occupancy_pct }),
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`${path} returned ${res.status}: ${text.slice(0, 160)}`);
+  }
+  return (await res.json()) as T;
+}
+
+export async function checkHealth(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/health`);
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Runs the three models. Occupancy goes first because the fuzzy controller
+ * needs its percentage; the Random Forest runs in parallel with it.
+ */
+export async function evaluate(i: Inputs): Promise<Verdict> {
+  const temp = clamp(i.temp, 15, 45);
+  const humidity = clamp(i.humidity, 0, 100);
+
+  const [rf, occ] = await Promise.all([
+    post<RfResponse>("/predict/ac", {
+      ambient_temp: temp,
+      relative_humidity: humidity,
+      motion_sensor: i.motion ? 1 : 0,
+      grid_power: i.grid ? 1 : 0,
+      hour: Math.round(clamp(i.hour, 0, 23)),
+      day_of_week: Math.round(clamp(i.dow, 0, 6)),
+    }),
+    post<OccResponse>("/occupancy/estimate", {
+      timestamp: periodOf(i.hour),
+      motion_detected: i.motion,
+    }),
+  ]);
+
+  const fuzzy = await post<FuzzyResponse>("/control/fuzzy", {
+    temperature_c: temp,
+    humidity_pct: humidity,
+    occupancy_pct: clamp(occ.occupancy_percentage, 0, 100),
   });
 
-const weatherDescription = (code: number | null) => {
-  if (code === null) return "Condition unavailable";
-  if (code === 0) return "Clear sky";
-  if ([1, 2, 3].includes(code)) return "Partly cloudy";
-  if ([45, 48].includes(code)) return "Foggy";
-  if ([51, 53, 55, 56, 57].includes(code)) return "Drizzle";
-  if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return "Rain";
-  if ([71, 73, 75, 77, 85, 86].includes(code)) return "Snow";
-  if ([95, 96, 99].includes(code)) return "Thunderstorm";
-  return "Condition unavailable";
-};
+  return { rf, occ, fuzzy, rule: ruleMode(temp) };
+}
 
-export async function getWeather(): Promise<WeatherData & { description: string }> {
-  const params = new URLSearchParams({
-    latitude: "19.3002",
-    longitude: "72.8762",
-    current: "temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m",
-    daily: "temperature_2m_max,temperature_2m_min",
-    timezone: "Asia/Kolkata",
-    forecast_days: "1",
-  });
-  const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
-  if (!response.ok) throw new Error(`Weather service returned ${response.status}`);
-  const data = await response.json() as {
-    current?: { temperature_2m?: number; apparent_temperature?: number; relative_humidity_2m?: number; weather_code?: number; wind_speed_10m?: number };
-    daily?: { temperature_2m_max?: number[]; temperature_2m_min?: number[] };
-  };
-  const code = data.current?.weather_code ?? null;
+interface MeteoResponse {
+  current: { temperature_2m: number; relative_humidity_2m: number };
+}
+
+export async function fetchMumbaiWeather(): Promise<{
+  temp: number;
+  humidity: number;
+}> {
+  const url =
+    "https://api.open-meteo.com/v1/forecast?latitude=19.076&longitude=72.8777" +
+    "&current=temperature_2m,relative_humidity_2m&timezone=Asia%2FKolkata";
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Weather request failed (${res.status})`);
+  const data = (await res.json()) as MeteoResponse;
   return {
-    temperature: data.current?.temperature_2m ?? null,
-    apparentTemperature: data.current?.apparent_temperature ?? null,
-    humidity: data.current?.relative_humidity_2m ?? null,
-    windSpeed: data.current?.wind_speed_10m ?? null,
-    weatherCode: code,
-    high: data.daily?.temperature_2m_max?.[0] ?? null,
-    low: data.daily?.temperature_2m_min?.[0] ?? null,
-    updatedAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    description: weatherDescription(code),
+    temp: data.current.temperature_2m,
+    humidity: data.current.relative_humidity_2m,
   };
 }
