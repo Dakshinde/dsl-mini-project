@@ -102,3 +102,76 @@ export async function fetchMumbaiWeather(): Promise<{
     humidity: data.current.relative_humidity_2m,
   };
 }
+
+/* ---------- Planner: next 24 hours ---------- */
+
+export interface HourForecast {
+  time: string;
+  hour: number;
+  dow: number;
+  temp: number;
+  humidity: number;
+}
+
+export interface HourPlan extends HourForecast {
+  home: boolean;
+  verdict: Verdict | null;
+}
+
+interface HourlyMeteo {
+  hourly: {
+    time: string[];
+    temperature_2m: number[];
+    relative_humidity_2m: number[];
+  };
+}
+
+export async function fetchHourlyForecast(): Promise<HourForecast[]> {
+  const url =
+    "https://api.open-meteo.com/v1/forecast?latitude=19.076&longitude=72.8777" +
+    "&hourly=temperature_2m,relative_humidity_2m&forecast_days=2&timezone=Asia%2FKolkata";
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Forecast request failed (${res.status})`);
+  const data = (await res.json()) as HourlyMeteo;
+
+  const pad = (x: number) => String(x).padStart(2, "0");
+  const n = new Date();
+  const key = `${n.getFullYear()}-${pad(n.getMonth() + 1)}-${pad(n.getDate())}T${pad(n.getHours())}:00`;
+  let start = data.hourly.time.findIndex((t) => t >= key);
+  if (start < 0) start = 0;
+
+  return data.hourly.time.slice(start, start + 24).map((t, k) => {
+    const d = new Date(t);
+    const idx = start + k;
+    return {
+      time: t,
+      hour: d.getHours(),
+      dow: (d.getDay() + 6) % 7,
+      temp: clamp(data.hourly.temperature_2m[idx], 15, 45),
+      humidity: clamp(Math.round(data.hourly.relative_humidity_2m[idx]), 0, 100),
+    };
+  });
+}
+
+/** One evaluation per hour, run in parallel; a failed hour becomes verdict: null. */
+export async function planDay(
+  forecast: HourForecast[],
+  isHome: (hour: number) => boolean,
+): Promise<HourPlan[]> {
+  const results = await Promise.allSettled(
+    forecast.map((f) =>
+      evaluate({
+        temp: f.temp,
+        humidity: f.humidity,
+        motion: isHome(f.hour),
+        grid: true,
+        hour: f.hour,
+        dow: f.dow,
+      }),
+    ),
+  );
+  return forecast.map((f, i) => {
+    const r = results[i];
+    return { ...f, home: isHome(f.hour), verdict: r.status === "fulfilled" ? r.value : null };
+  });
+}

@@ -12,7 +12,16 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { checkHealth, clamp, evaluate, fetchMumbaiWeather, periodOf } from "./api";
+import {
+  checkHealth,
+  clamp,
+  evaluate,
+  fetchHourlyForecast,
+  fetchMumbaiWeather,
+  periodOf,
+  planDay,
+} from "./api";
+import type { HourForecast, HourPlan } from "./api";
 import type { Inputs, Verdict } from "./types";
 
 /* ---------- static knowledge taken from the backend audit ---------- */
@@ -418,6 +427,166 @@ function Advisor() {
   );
 }
 
+/* ---------- Planner ---------- */
+
+type Schedule = "home" | "office" | "away";
+const SCHEDULES: Record<Schedule, { label: string; isHome: (h: number) => boolean }> = {
+  home: { label: "Home all day", isHome: () => true },
+  office: { label: "Away 9 AM to 6 PM", isHome: (h) => h < 9 || h >= 18 },
+  away: { label: "Away all day", isHome: () => false },
+};
+
+const fmtHour = (h: number) => `${h % 12 === 0 ? 12 : h % 12} ${h < 12 ? "AM" : "PM"}`;
+
+interface Block {
+  mode: string;
+  start: number;
+  end: number;
+  minT: number;
+  maxT: number;
+}
+
+function groupBlocks(plans: HourPlan[]): Block[] {
+  const blocks: Block[] = [];
+  for (const p of plans) {
+    const mode = p.verdict?.fuzzy.suggested_mode ?? "Unavailable";
+    const last = blocks[blocks.length - 1];
+    if (last && last.mode === mode) {
+      last.end = (p.hour + 1) % 24;
+      last.minT = Math.min(last.minT, p.temp);
+      last.maxT = Math.max(last.maxT, p.temp);
+    } else {
+      blocks.push({ mode, start: p.hour, end: (p.hour + 1) % 24, minT: p.temp, maxT: p.temp });
+    }
+  }
+  return blocks;
+}
+
+function Planner() {
+  const [forecast, setForecast] = useState<HourForecast[] | null>(null);
+  const [plans, setPlans] = useState<HourPlan[] | null>(null);
+  const [schedule, setSchedule] = useState<Schedule>("home");
+  const [reload, setReload] = useState(0);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    setError(null);
+    fetchHourlyForecast()
+      .then(setForecast)
+      .catch((e: unknown) =>
+        setError(e instanceof Error ? e.message : "Could not load the forecast"),
+      );
+  }, [reload]);
+
+  useEffect(() => {
+    if (!forecast) return;
+    let cancelled = false;
+    setBusy(true);
+    planDay(forecast, SCHEDULES[schedule].isHome)
+      .then((p) => {
+        if (!cancelled) setPlans(p);
+      })
+      .finally(() => {
+        if (!cancelled) setBusy(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [forecast, schedule]);
+
+  const blocks = useMemo(() => (plans ? groupBlocks(plans) : []), [plans]);
+  const answered = plans ? plans.filter((p) => p.verdict !== null) : [];
+  const differ = answered.filter(
+    (p) => p.verdict && p.verdict.rf.predicted_mode !== p.verdict.fuzzy.suggested_mode,
+  ).length;
+  const peak = plans ? Math.max(...plans.map((p) => p.temp)) : 0;
+
+  return (
+    <>
+      <section className="panel">
+        <h3>Your next 24 hours</h3>
+        <div className="row">
+          <label className="field" style={{ minWidth: 220 }}>
+            Who is home?
+            <select value={schedule} onChange={(e) => setSchedule(e.target.value as Schedule)}>
+              {Object.entries(SCHEDULES).map(([k, s]) => (
+                <option key={k} value={k}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button className="btn ghost" onClick={() => setReload((n) => n + 1)}>
+            Refresh forecast
+          </button>
+        </div>
+        <p className="muted">
+          Uses the Mumbai hourly forecast from Open-Meteo (outdoor conditions). The schedule decides
+          whether motion is assumed in the room; it is your guess, not a sensor reading.
+        </p>
+      </section>
+
+      {error && (
+        <div className="alert bad" role="alert">
+          {error}
+        </div>
+      )}
+      {plans && answered.length === 0 && (
+        <div className="alert bad" role="alert">
+          The backend did not answer. Start it on port 8000 and refresh the forecast.
+        </div>
+      )}
+
+      {plans && answered.length > 0 && (
+        <>
+          <section className="panel" aria-busy={busy}>
+            <h3>Hour by hour (fuzzy controller)</h3>
+            <div className="strip-wrap">
+              <div className="strip">
+                {plans.map((p) => (
+                  <div
+                    key={p.time}
+                    className="cell"
+                    data-mode={p.verdict?.fuzzy.suggested_mode ?? "none"}
+                    title={`${fmtHour(p.hour)}: ${Math.round(p.temp)}°C, ${p.humidity}% humidity`}
+                  >
+                    <small>{fmtHour(p.hour)}</small>
+                    <b>{Math.round(p.temp)}°</b>
+                    <small>{p.verdict?.fuzzy.suggested_mode ?? "n/a"}</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="panel">
+            <h3>The plan</h3>
+            <ul className="blocks">
+              {blocks.map((b, idx) => (
+                <li key={idx}>
+                  <span className="when">
+                    {fmtHour(b.start)} to {fmtHour(b.end)}
+                  </span>
+                  <Chip mode={b.mode} />
+                  <span className="muted">
+                    {Math.round(b.minT)}
+                    {Math.round(b.minT) !== Math.round(b.maxT) && `–${Math.round(b.maxT)}`}°C
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p className="muted">
+              Peak outdoor temperature: {Math.round(peak)}°C. The Random Forest disagreed with the
+              fuzzy controller in {differ} of {answered.length} hours.
+            </p>
+          </section>
+        </>
+      )}
+    </>
+  );
+}
+
 /* ---------- Lab ---------- */
 
 function MfChart({
@@ -648,7 +817,7 @@ function Lab() {
 /* ---------- shell ---------- */
 
 export default function App() {
-  const [tab, setTab] = useState<"advisor" | "lab">("advisor");
+  const [tab, setTab] = useState<"advisor" | "planner" | "lab">("advisor");
   const [online, setOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -675,12 +844,15 @@ export default function App() {
         <button role="tab" aria-selected={tab === "advisor"} onClick={() => setTab("advisor")}>
           Advisor
         </button>
+        <button role="tab" aria-selected={tab === "planner"} onClick={() => setTab("planner")}>
+          Planner
+        </button>
         <button role="tab" aria-selected={tab === "lab"} onClick={() => setTab("lab")}>
           ML Lab
         </button>
       </nav>
 
-      <main>{tab === "advisor" ? <Advisor /> : <Lab />}</main>
+      <main>{tab === "advisor" ? <Advisor /> : tab === "planner" ? <Planner /> : <Lab />}</main>
 
       <p className="foot">
         Prototype for decision support. The Random Forest was trained on simulated data, and the
