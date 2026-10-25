@@ -1,0 +1,29 @@
+--- dataset head ---
+timestamp,ambient_temp,relative_humidity,motion_sensor,grid_power,optimal_ac_mode,hour,day_of_week,day_of_month
+2026-05-01 00:00:00,28.6,90.62,1,1,2,0,4,1
+2026-05-01 01:00:00,29.91,85.73,1,0,0,1,4,1
+2026-05-01 02:00:00,32.78,83.95,0,1,2,2,4,1
+2026-05-01 03:00:00,35.49,84.14,1,1,2,3,4,1
+--- dataset row count ---
+721 hems_phase1_working_dataset.csv
+--- occupancy config ---
+{
+  "model_name": "HEMS Bayesian Occupancy Estimator",
+  "version": "0.1.0",
+  "status": "provisional",
+  "time_periods": {
+    "morning": 0.5,
+    "afternoon": 0.45,
+    "evening": 0.7,
+    "night": 0.6
+  },
+  "p_motion_given_occupied": 0.9,
+  "p_motion_given_empty": 0.05,
+  "assumption": "Illustrative probabilities; not trained or validated against ground-truth occupancy labels."
+}--- model metadata ---
+RandomForestClassifier
+{'bootstrap': True, 'ccp_alpha': 0.0, 'class_weight': 'balanced', 'criterion': 'gini', 'max_depth': None, 'max_features': 'sqrt', 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 2, 'min_weight_fraction_leaf': 0.0, 'monotonic_cst': None, 'n_estimators': 300, 'n_jobs': -1, 'oob_score': False, 'random_state': 42, 'verbose': 0, 'warm_start': False}
+feature_names_in_ ['ambient_temp' 'relative_humidity' 'motion_sensor' 'grid_power' 'hour'
+ 'day_of_week']
+classes_ [0 1 2]
+n_features_in_ 6

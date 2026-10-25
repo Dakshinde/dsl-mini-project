@@ -1,0 +1,103 @@
+--- Review I project facts ---
+Mini Project Review 1
+Title: Mini Project Topic Selection and Review 1
+1. Project Details
+●​ Project Title: Smart Home Appliance Energy Management System: A Data-Driven
+Hybrid AI Approach for Climate & Load Control
+●​ Student Details:
+Roll Number
+
+Name
+
+Class/Division
+
+48
+
+Simran Sayyed
+
+IT-B
+
+53
+
+Samee Shaikh
+
+IT-B
+
+62
+
+Daksh Shinde
+
+IT-B
+
+63
+
+Kanishka Shinde
+
+IT-B
+
+64
+
+Muzammil Shivanagi
+
+IT-B
+
+●​ Subject: Data Science Lab
+●​ Academic Year: 2026–27
+●​ Department: Information Technology
+--- Review I objectives ---
+gap by integrating a natural language intent parser [2, 3], Bayesian occupancy inference [1], and
+multi-variable Fuzzy Logic control into an integrated, interactive Streamlit simulation
+environment [1, 5].
+5. Objectives of the Project
+1.​ To study multi-modal time-series micro-climate datasets and existing AI control
+techniques for home energy optimization.
+2.​ To build a Cognitive NLP engine capable of parsing natural human text queries into
+operational thermal comfort parameters.
+3.​ To develop a Bayesian Belief Network for inferring room occupancy probability under
+motion sensor uncertainty.
+4.​ To implement a Fuzzy Logic Control Engine for multi-appliance load throttling, mode
+selection (Cool vs. Dry), and inverter overload prevention.
+5.​ To evaluate system performance using standard evaluation metrics (Accuracy, Precision,
+
+Recall, F1-score, and Confusion Matrix) and present a dashboard using Streamlit.
+6. Proposed Methodology
+--- Review I methodology/tools ---
+6. Proposed Methodology
+The proposed system follows a step-by-step data processing, probabilistic reasoning, fuzzy
+inferencing, and visualization pipeline.
+
+​
+Brief Description of Each Step
+●​ Data Collection: A 30-day (720-hour) micro-climate time-series dataset
+(smart_home_climate_data.csv) simulating tropical temperature swings ,sensor triggers,
+and power grid status (Mains vs. Inverter) is generated.
+●​ Data Preprocessing: Missing values are handled, continuous climate variables are
+normalized, and textual human commands are lowercased, tokenized, and mapped to
+domain features.
+●​ Feature Selection: Key indicators impacting appliance power state—such as
+ambient_temp, relative_humidity, motion_sensor, and grid_power—are isolated for
+inferencing.
+●​ Model Training & Fitting: ML models (Random Forest, Decision Trees, Naive Bayes,
+KNN) and Fuzzy Rule bases are trained and fitted on the multi-modal dataset.
+●​ Testing & Evaluation: System outputs are evaluated using multi-class metrics including
+Accuracy, Precision, Recall, F1-Score, and Confusion Matrix visual maps.
+●​ Digital Footprint & Energy Dashboard: Results, real-time slider simulations, grid
+failover switches, and performance plots are served through an interactive Streamlit web
+application.
+
+7. Proposed Technologies / Tools
+●​ Python 3.10+: Core programming language for data engineering, ML modeling, and
+control logic.
+●​ Scikit-Learn: Machine learning classifier training, data splitting, and metrics evaluation.
+●​ NumPy & Pandas: Time-series dataset generation, manipulation, and numerical
+processing.
+●​ Matplotlib & Seaborn: Exploratory Data Analysis (EDA) plotting and confusion matrix
+heatmap generation.
+●​ Streamlit: Interactive web dashboard development for live user simulation and parameter
+tuning.
+●​ Scikit-Fuzzy / Rule Engine: Triangular/trapezoidal fuzzy membership function
+processing and defuzzification.
+●​ NLTK / Regex: Natural Language Parsing of user comfort commands and intent
+extraction.
+●​ Google Colab / Jupyter: Interactive experimentation, EDA execution, and comparative
+model testing.

@@ -1,0 +1,9 @@
+id,endpoint,input,expected,actual,pass
+T1,GET /health,,200,200,True
+T2,POST /predict/ac,"{'ambient_temp': 32, 'relative_humidity': 70, 'motion_sensor': 1, 'grid_power': 0.8, 'hour': 14, 'day_of_week': 3}",200,200,True
+T3,POST /occupancy/estimate,"{'timestamp': 'morning', 'motion_detected': True}",200,200,True
+T4,POST /commands/parse,{'command': 'turn on the AC'},200,200,True
+T5,POST /control/fuzzy,"{'temperature_c': 32, 'humidity_pct': 70, 'occupancy_pct': 90}",200,200,True
+T6,POST /recommendation,"{'temperature_c': 27, 'humidity_pct': 70, 'occupancy_pct': 90}",200,200,True
+T7,POST /predict/ac,"{'ambient_temp': 46, 'relative_humidity': 70, 'motion_sensor': 1, 'grid_power': 0.8, 'hour': 14, 'day_of_week': 3}",422,422,True
+T8,POST /control/fuzzy,"{'temperature_c': 32, 'humidity_pct': 101, 'occupancy_pct': 90}",422,422,True

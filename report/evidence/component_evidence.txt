@@ -1,0 +1,33 @@
+OCCUPANCY_TABLE
+time_period  motion_detected  prior  posterior  percentage
+    morning            False   0.50   0.095238    9.523810
+    morning             True   0.50   0.947368   94.736842
+  afternoon            False   0.45   0.079295    7.929515
+  afternoon             True   0.45   0.936416   93.641618
+    evening            False   0.70   0.197183   19.718310
+    evening             True   0.70   0.976744   97.674419
+      night            False   0.60   0.136364   13.636364
+      night             True   0.60   0.964286   96.428571
+FUZZY_TABLE
+ temperature_c  humidity_pct  occupancy_pct  cooling_demand suggested_mode
+            25            50              5            5.42            Off
+            26            50             90           45.00            Eco
+            30            50             90           52.10            Eco
+            32            70             90           72.56            Dry
+            42            60             95           90.71       Max Cool
+            34            64             80           73.28       Max Cool
+            34            65             80           74.27            Dry
+            38            40             90           78.19       Max Cool
+FUZZY_RULES
+1. occupancy low -> off
+2. occupancy medium AND temperature low -> off
+3. occupancy medium AND temperature moderate -> low
+4. occupancy medium AND temperature high -> high
+5. occupancy medium AND temperature very_high -> maximum
+6. occupancy high AND temperature low -> off
+7. occupancy high AND temperature moderate -> medium
+8. occupancy high AND temperature high -> high
+9. occupancy high AND temperature very_high -> maximum
+10. occupancy high AND humidity high AND temperature moderate -> high
+11. occupancy high AND humidity high AND temperature high -> maximum
+12. occupancy low AND temperature very_high -> low

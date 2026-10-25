@@ -1,0 +1,116 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.7.0 -- /home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/dakshhinde/Code/DSL-2/dsl-mini-project
+plugins: anyio-4.15.1
+collecting ... collected 34 items
+
+tests/test_api.py::test_health_endpoint PASSED                           [  2%]
+tests/test_api.py::test_random_forest_prediction PASSED                  [  5%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[ambient_temp-14] PASSED [  8%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[ambient_temp-46] PASSED [ 11%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[relative_humidity--1] PASSED [ 14%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[relative_humidity-101] PASSED [ 17%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[motion_sensor-2] PASSED [ 20%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[grid_power--0.1] PASSED [ 23%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[grid_power-1.1] PASSED [ 26%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[hour--1] PASSED [ 29%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[hour-24] PASSED [ 32%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[day_of_week--1] PASSED [ 35%]
+tests/test_api.py::test_random_forest_rejects_invalid_input[day_of_week-7] PASSED [ 38%]
+tests/test_api.py::test_occupancy_estimation PASSED                      [ 41%]
+tests/test_api.py::test_valid_nlp_command PASSED                         [ 44%]
+tests/test_api.py::test_unknown_nlp_command_requests_clarification PASSED [ 47%]
+tests/test_api.py::test_ambiguous_nlp_command_requests_clarification PASSED [ 50%]
+tests/test_api.py::test_fuzzy_controller PASSED                          [ 52%]
+tests/test_api.py::test_fuzzy_controller_rejects_invalid_input[temperature_c-14] PASSED [ 55%]
+tests/test_api.py::test_fuzzy_controller_rejects_invalid_input[temperature_c-46] PASSED [ 58%]
+tests/test_api.py::test_fuzzy_controller_rejects_invalid_input[humidity_pct--1] PASSED [ 61%]
+tests/test_api.py::test_fuzzy_controller_rejects_invalid_input[humidity_pct-101] PASSED [ 64%]
+tests/test_api.py::test_fuzzy_controller_rejects_invalid_input[occupancy_pct--1] PASSED [ 67%]
+tests/test_api.py::test_fuzzy_controller_rejects_invalid_input[occupancy_pct-101] PASSED [ 70%]
+tests/test_api.py::test_unified_recommendation_preserves_component_outputs PASSED [ 73%]
+tests/test_api.py::test_unified_recommendation_can_show_component_disagreement PASSED [ 76%]
+tests/test_api.py::test_missing_required_fields_returns_422[/predict/ac] PASSED [ 79%]
+tests/test_api.py::test_missing_required_fields_returns_422[/occupancy/estimate] PASSED [ 82%]
+tests/test_api.py::test_missing_required_fields_returns_422[/commands/parse] PASSED [ 85%]
+tests/test_api.py::test_missing_required_fields_returns_422[/control/fuzzy] PASSED [ 88%]
+tests/test_api.py::test_invalid_data_types_return_422 PASSED             [ 91%]
+tests/test_api.py::test_missing_model_artifact_returns_500 PASSED        [ 94%]
+tests/test_api.py::test_model_prediction_failure_returns_500 PASSED      [ 97%]
+tests/test_api.py::test_fuzzy_import_failure_returns_500 PASSED          [100%]
+
+=============================== warnings summary ===============================
+.venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+HEMS/schemas.py:72
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:72: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('motion_sensor')
+
+HEMS/schemas.py:78
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:78: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('grid_power')
+
+HEMS/schemas.py:84
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:84: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('hour')
+
+HEMS/schemas.py:90
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:90: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('day_of_week')
+
+HEMS/schemas.py:138
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:138: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('timestamp')
+
+HEMS/schemas.py:165
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:165: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('command')
+
+HEMS/schemas.py:201
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:201: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('temperature_c')
+
+HEMS/schemas.py:207
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:207: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('humidity_pct')
+
+HEMS/schemas.py:213
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:213: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('occupancy_pct')
+
+HEMS/schemas.py:252
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:252: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('temperature_c')
+
+HEMS/schemas.py:258
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:258: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('humidity_pct')
+
+HEMS/schemas.py:264
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS/schemas.py:264: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.14/migration/
+    @validator('occupancy_pct')
+
+tests/test_api.py::test_random_forest_prediction
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/test_api.py::test_random_forest_prediction
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+  https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+    warnings.warn(
+
+tests/test_api.py::test_random_forest_prediction
+tests/test_api.py::test_random_forest_prediction
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+    warnings.warn(
+
+tests/test_api.py: 15 warnings
+  /home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/skfuzzy/control/controlsystem.py:682: DeprecationWarning: Passing more than 2 positional arguments to np.maximum and np.minimum is deprecated. If you meant to use the third argument as an output, use the `out` keyword argument instead. If you hoped to work with more than 2 inputs, combine them into a single array and get the extrema for the relevant axis.
+    np.maximum(output_mf, term_mfs[label], output_mf)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================= 34 passed, 32 warnings in 2.92s ========================

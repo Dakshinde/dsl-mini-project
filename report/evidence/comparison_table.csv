@@ -1,0 +1,43 @@
+temperature,humidity,rf,fuzzy,temperature_rule,occupancy_percentage,statuses
+20,50,Eco,Off,Off,93.64,200/200/200
+20,80,Eco,Off,Off,93.64,200/200/200
+21,50,Eco,Off,Off,93.64,200/200/200
+21,80,Eco,Off,Off,93.64,200/200/200
+22,50,Eco,Eco,Off,93.64,200/200/200
+22,80,Eco,Dry,Off,93.64,200/200/200
+23,50,Eco,Eco,Off,93.64,200/200/200
+23,80,Eco,Dry,Off,93.64,200/200/200
+24,50,Eco,Eco,Off,93.64,200/200/200
+24,80,Eco,Dry,Off,93.64,200/200/200
+25,50,Eco,Eco,Eco,93.64,200/200/200
+25,80,Eco,Dry,Eco,93.64,200/200/200
+26,50,Eco,Eco,Eco,93.64,200/200/200
+26,80,Eco,Dry,Eco,93.64,200/200/200
+27,50,Eco,Eco,Eco,93.64,200/200/200
+27,80,Eco,Dry,Eco,93.64,200/200/200
+28,50,Eco,Eco,Eco,93.64,200/200/200
+28,80,Dry,Dry,Eco,93.64,200/200/200
+29,50,Eco,Eco,Eco,93.64,200/200/200
+29,80,Dry,Dry,Eco,93.64,200/200/200
+30,50,Eco,Eco,Eco,93.64,200/200/200
+30,80,Dry,Dry,Eco,93.64,200/200/200
+31,50,Eco,Eco,Eco,93.64,200/200/200
+31,80,Dry,Dry,Eco,93.64,200/200/200
+32,50,Eco,Eco,Dry,93.64,200/200/200
+32,80,Dry,Dry,Dry,93.64,200/200/200
+33,50,Max Cool,Max Cool,Dry,93.64,200/200/200
+33,80,Dry,Dry,Dry,93.64,200/200/200
+34,50,Max Cool,Max Cool,Dry,93.64,200/200/200
+34,80,Dry,Dry,Dry,93.64,200/200/200
+35,50,Max Cool,Max Cool,Dry,93.64,200/200/200
+35,80,Dry,Max Cool,Dry,93.64,200/200/200
+36,50,Max Cool,Max Cool,Dry,93.64,200/200/200
+36,80,Dry,Max Cool,Dry,93.64,200/200/200
+37,50,Max Cool,Max Cool,Dry,93.64,200/200/200
+37,80,Dry,Max Cool,Dry,93.64,200/200/200
+38,50,Max Cool,Max Cool,Max Cool,93.64,200/200/200
+38,80,Dry,Max Cool,Max Cool,93.64,200/200/200
+39,50,Max Cool,Max Cool,Max Cool,93.64,200/200/200
+39,80,Dry,Max Cool,Max Cool,93.64,200/200/200
+40,50,Max Cool,Max Cool,Max Cool,93.64,200/200/200
+40,80,Dry,Max Cool,Max Cool,93.64,200/200/200

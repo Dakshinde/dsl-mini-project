@@ -1,0 +1,148 @@
+[
+  {
+    "command": "turn on the AC",
+    "status": 200,
+    "response": {
+      "command": "turn on the ac",
+      "intent": "power_control",
+      "appliance": "ac",
+      "action": "set_power",
+      "value": "on",
+      "confidence": 0.95,
+      "needs_clarification": false,
+      "message": "ac power command identified: on."
+    }
+  },
+  {
+    "command": "switch off the fan",
+    "status": 200,
+    "response": {
+      "command": "switch off the fan",
+      "intent": "power_control",
+      "appliance": "fan",
+      "action": "set_power",
+      "value": "off",
+      "confidence": 0.95,
+      "needs_clarification": false,
+      "message": "fan power command identified: off."
+    }
+  },
+  {
+    "command": "set the AC to eco mode",
+    "status": 200,
+    "response": {
+      "command": "set the ac to eco mode",
+      "intent": "set_mode",
+      "appliance": "ac",
+      "action": "set_mode",
+      "value": "eco",
+      "confidence": 0.98,
+      "needs_clarification": false,
+      "message": "AC mode identified: eco."
+    }
+  },
+  {
+    "command": "maximum cooling for the AC",
+    "status": 200,
+    "response": {
+      "command": "maximum cooling for the ac",
+      "intent": "set_mode",
+      "appliance": "ac",
+      "action": "set_mode",
+      "value": "max_cool",
+      "confidence": 0.98,
+      "needs_clarification": false,
+      "message": "AC mode identified: max_cool."
+    }
+  },
+  {
+    "command": "dehumidify the air conditioner",
+    "status": 200,
+    "response": {
+      "command": "dehumidify the air conditioner",
+      "intent": "set_mode",
+      "appliance": "ac",
+      "action": "set_mode",
+      "value": "dry",
+      "confidence": 0.98,
+      "needs_clarification": false,
+      "message": "AC mode identified: dry."
+    }
+  },
+  {
+    "command": "save energy while I am away",
+    "status": 200,
+    "response": {
+      "command": "save energy while i am away",
+      "intent": "energy_saving",
+      "appliance": "whole_home",
+      "action": "optimize_energy",
+      "value": {
+        "energy_saving": true,
+        "occupancy_context": "away"
+      },
+      "confidence": 0.95,
+      "needs_clarification": false,
+      "message": "Energy-saving preference identified."
+    }
+  },
+  {
+    "command": "save electricity",
+    "status": 200,
+    "response": {
+      "command": "save electricity",
+      "intent": "energy_saving",
+      "appliance": "whole_home",
+      "action": "optimize_energy",
+      "value": {
+        "energy_saving": true,
+        "occupancy_context": "unspecified"
+      },
+      "confidence": 0.85,
+      "needs_clarification": false,
+      "message": "Energy-saving preference identified."
+    }
+  },
+  {
+    "command": "play music",
+    "status": 200,
+    "response": {
+      "command": "play music",
+      "intent": "unknown",
+      "appliance": null,
+      "action": null,
+      "value": null,
+      "confidence": 0.0,
+      "needs_clarification": true,
+      "message": "Which appliance do you mean?"
+    }
+  },
+  {
+    "command": "turn on and turn off the AC",
+    "status": 200,
+    "response": {
+      "command": "turn on and turn off the ac",
+      "intent": "ambiguous",
+      "appliance": "ac",
+      "action": null,
+      "value": null,
+      "confidence": 0.0,
+      "needs_clarification": true,
+      "message": "The command contains conflicting power actions."
+    }
+  },
+  {
+    "command": "turn on the refrigerator",
+    "status": 200,
+    "response": {
+      "command": "turn on the refrigerator",
+      "intent": "power_control",
+      "appliance": "refrigerator",
+      "action": "set_power",
+      "value": "on",
+      "confidence": 0.95,
+      "needs_clarification": false,
+      "message": "refrigerator power command identified: on."
+    }
+  }
+]

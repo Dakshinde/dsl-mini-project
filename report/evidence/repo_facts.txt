@@ -1,0 +1,28 @@
+--- versions ---
+Python 3.12.3
+v24.12.0
+scikit-learn 1.9.1
+fastapi 0.161.1
+scikit-fuzzy 0.5.0
+--- source line counts ---
+288 ./tests/test_api.py
+153 ./Output 3C/fuzzy_controller.py
+0 ./HEMS/__init__.py
+293 ./HEMS/schemas.py
+650 ./HEMS/main.py
+162 ./output phase 3b/nlp_parser.py
+59 ./report/component_evidence.py
+105 ./report/api_evidence.py
+146 ./report/evaluate_rf.py
+37 frontend/src/types.ts
+176 frontend/src/api.ts
+1 frontend/src/vite-env.d.ts
+10 frontend/src/main.tsx
+984 frontend/src/App.tsx
+--- training script search ---
+NOT PRESENT
+--- remotes ---
+origin	https://github.com/Dakshinde/dsl-mini-project.git (fetch)
+origin	https://github.com/Dakshinde/dsl-mini-project.git (push)
+upstream	https://github.com/samee0577/dsl-mini-project.git (fetch)
+upstream	https://github.com/samee0577/dsl-mini-project.git (push)

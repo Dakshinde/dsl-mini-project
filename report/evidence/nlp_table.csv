@@ -1,0 +1,11 @@
+command,intent,appliance,value,confidence,needs_clarification,expected_intent,pass
+turn on the AC,power_control,ac,on,0.95,False,power_control,True
+switch off the fan,power_control,fan,off,0.95,False,power_control,True
+set the AC to eco mode,set_mode,ac,eco,0.98,False,set_mode,True
+maximum cooling for the AC,set_mode,ac,max_cool,0.98,False,set_mode,True
+dehumidify the air conditioner,set_mode,ac,dry,0.98,False,set_mode,True
+save energy while I am away,energy_saving,whole_home,"{'energy_saving': True, 'occupancy_context': 'away'}",0.95,False,energy_saving,True
+save electricity,energy_saving,whole_home,"{'energy_saving': True, 'occupancy_context': 'unspecified'}",0.85,False,energy_saving,True
+play music,unknown,,,0.0,True,unknown,True
+turn on and turn off the AC,ambiguous,ac,,0.0,True,ambiguous,True
+turn on the refrigerator,power_control,refrigerator,on,0.95,False,power_control,True

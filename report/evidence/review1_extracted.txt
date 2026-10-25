@@ -1,0 +1,194 @@
+Mini Project Review 1
+Title: Mini Project Topic Selection and Review 1
+1. Project Details
+●​ Project Title: Smart Home Appliance Energy Management System: A Data-Driven
+Hybrid AI Approach for Climate & Load Control
+●​ Student Details:
+Roll Number
+
+Name
+
+Class/Division
+
+48
+
+Simran Sayyed
+
+IT-B
+
+53
+
+Samee Shaikh
+
+IT-B
+
+62
+
+Daksh Shinde
+
+IT-B
+
+63
+
+Kanishka Shinde
+
+IT-B
+
+64
+
+Muzammil Shivanagi
+
+IT-B
+
+●​ Subject: Data Science Lab
+●​ Academic Year: 2026–27
+●​ Department: Information Technology
+
+2. Problem Statement
+Background of the Problem
+In tropical and high-humidity micro-climates, standard household cooling appliances operate in
+total functional isolation. High-power appliances like Inverter Air Conditioners (ACs), BLDC
+Ceiling Fans, and Refrigerators run on isolated internal thermostats without exchanging data or
+adjusting to dynamic environmental conditions.
+During hot and humid monsoon weather ("moist" weather), occupants frequently over-cool
+rooms with ACs simply to extract moisture, leading to severe energy inefficiency and high
+electricity bills.
+
+Who Faces This Problem?
+●​ Urban and Suburban Households: Families in high-humidity tropical regions facing
+excessive monthly power bills due to uncoordinated cooling appliances.
+●​ Inverter/Battery-Reliant Homes: Residents experiencing abrupt battery inverter tripping
+during frequent power outages caused by simultaneous appliance compressor inrush
+currents.
+●​ Energy Management Researchers & Utilities: Smart grid planners seeking
+software-based residential load shedding and peak-demand optimization strategies without
+expensive hardware upgrades.
+
+Why Is the Problem Important?
+Individual appliances cannot optimize household energy footprint independently. Treating
+relative humidity strictly through temperature drops leads to excessive power usage.
+Coordinating thermal comfort through wind-chill effects (BLDC Fans), dehumidification modes
+(Inverter ACs), and load-deferral (Refrigerator defrost cycles) significantly lowers residential
+energy consumption while ensuring uninterrupted operation on solar/inverter backup.
+Existing Difficulty
+Existing home automation systems operate via rigid, manual, or hard-coded rule sets (if-else
+triggers) that fail to capture:
+●​ Human comfort constraints expressed in natural, continuous language.
+●​ Probabilistic occupancy uncertainty in physical space.
+●​ Multi-variable trade-offs between relative humidity, temperature, and power grid
+limitations.
+Therefore, the proposed project addresses the following core problem:
+How can Natural Language Processing, Bayesian reasoning, and Fuzzy Logic control be
+integrated into a hybrid software framework to dynamically manage appliance energy
+consumption, eliminate over-cooling, and prevent battery inverter tripping during power grid
+outages?
+
+3. Proposed Project Title
+Smart Home Appliance Energy Management System: A Data-Driven Hybrid AI Approach
+for Climate & Load Control
+The proposed software-driven platform processes multi-modal time-series micro-climate data
+and human comfort commands through a 3-stage artificial intelligence architecture:
+1.​ Cognitive NLP Engine: Extracts human intent and thermal comfort boundaries from
+natural text prompts.
+2.​ Bayesian Belief Network: Infers room occupancy probabilities $P(\text{Occupancy}
+\mid E)$ under spatial motion uncertainty to avoid conditioning vacant spaces.
+3.​ Fuzzy Logic Control Engine: Evaluates continuous micro-climate variables (Ambient
+Temperature, Relative Humidity, Grid Power State) using De Morgan's fuzzy rules to
+dynamically adjust AC Compressor Load (%), AC Mode (Cool vs. Dry), BLDC Fan Speed
+(Steps 1–5), and Refrigerator Defrost Timing.
+4. Research Gap / Existing System Limitation
+From the literature survey [1–6], existing energy management solutions primarily focus on
+standalone appliance scheduling, direct temperature threshold triggers, or high-cost physical IoT
+sensor deployments [1, 2]. They fail to address the combined effect of high humidity and thermal
+load on battery inverters during grid outages [1, 5]. Standard systems treat relative humidity as a
+secondary variable, causing AC units to run at high compressor loads when operating in Dry
+Mode would achieve comfort at a fraction of the power [3, 6]. Furthermore, existing
+implementations lack probabilistic reasoning to handle motion sensor uncertainty and do not
+offer intuitive natural language interaction for end users [1, 2, 4]. The proposed system fills this
+gap by integrating a natural language intent parser [2, 3], Bayesian occupancy inference [1], and
+multi-variable Fuzzy Logic control into an integrated, interactive Streamlit simulation
+environment [1, 5].
+5. Objectives of the Project
+1.​ To study multi-modal time-series micro-climate datasets and existing AI control
+techniques for home energy optimization.
+2.​ To build a Cognitive NLP engine capable of parsing natural human text queries into
+operational thermal comfort parameters.
+3.​ To develop a Bayesian Belief Network for inferring room occupancy probability under
+motion sensor uncertainty.
+4.​ To implement a Fuzzy Logic Control Engine for multi-appliance load throttling, mode
+selection (Cool vs. Dry), and inverter overload prevention.
+5.​ To evaluate system performance using standard evaluation metrics (Accuracy, Precision,
+
+Recall, F1-score, and Confusion Matrix) and present a dashboard using Streamlit.
+6. Proposed Methodology
+The proposed system follows a step-by-step data processing, probabilistic reasoning, fuzzy
+inferencing, and visualization pipeline.
+
+​
+Brief Description of Each Step
+●​ Data Collection: A 30-day (720-hour) micro-climate time-series dataset
+(smart_home_climate_data.csv) simulating tropical temperature swings ,sensor triggers,
+and power grid status (Mains vs. Inverter) is generated.
+●​ Data Preprocessing: Missing values are handled, continuous climate variables are
+normalized, and textual human commands are lowercased, tokenized, and mapped to
+domain features.
+●​ Feature Selection: Key indicators impacting appliance power state—such as
+ambient_temp, relative_humidity, motion_sensor, and grid_power—are isolated for
+inferencing.
+●​ Model Training & Fitting: ML models (Random Forest, Decision Trees, Naive Bayes,
+KNN) and Fuzzy Rule bases are trained and fitted on the multi-modal dataset.
+●​ Testing & Evaluation: System outputs are evaluated using multi-class metrics including
+Accuracy, Precision, Recall, F1-Score, and Confusion Matrix visual maps.
+●​ Digital Footprint & Energy Dashboard: Results, real-time slider simulations, grid
+failover switches, and performance plots are served through an interactive Streamlit web
+application.
+
+7. Proposed Technologies / Tools
+●​ Python 3.10+: Core programming language for data engineering, ML modeling, and
+control logic.
+●​ Scikit-Learn: Machine learning classifier training, data splitting, and metrics evaluation.
+●​ NumPy & Pandas: Time-series dataset generation, manipulation, and numerical
+processing.
+●​ Matplotlib & Seaborn: Exploratory Data Analysis (EDA) plotting and confusion matrix
+heatmap generation.
+●​ Streamlit: Interactive web dashboard development for live user simulation and parameter
+tuning.
+●​ Scikit-Fuzzy / Rule Engine: Triangular/trapezoidal fuzzy membership function
+processing and defuzzification.
+●​ NLTK / Regex: Natural Language Parsing of user comfort commands and intent
+extraction.
+●​ Google Colab / Jupyter: Interactive experimentation, EDA execution, and comparative
+model testing.
+8. Expected Outcome
+The proposed system will successfully optimize household energy consumption across Inverter
+ACs, BLDC Fans, and Refrigerators under varying micro-climate conditions and grid states. The
+system expects to achieve:
+1.​ Zero Inverter Overload Trips: 100% suppression of simultaneous heavy compressor
+starts during grid outages (grid_power = 0).
+2.​ Dehumidification Efficiency: Automatic switching to AC Dry Mode during
+high-humidity monsoons, reducing over-cooling and saving power.
+3.​ High ML Classification Performance: High prediction accuracy (95%) across
+multi-class operating modes verified using Confusion Matrices, Precision, Recall, and
+F1-Scores.
+4.​ Interactive GUI: A fully functional Streamlit dashboard allowing users to input natural
+language commands, adjust real-time climate sliders, toggle power grid states, and
+visualize AI outputs.
+
+9. References
+1.​ L. Kaikkonen, T. Parviainen, M. Rahikainen, L. Uusitalo, and A. Lehikoinen, “Bayesian
+Networks in Environmental Risk Assessment: A Review,” Integrated Environmental
+Assessment and Management, vol. 17, no. 1, pp. 62–78, 2021.
+2.​ D. Blanco-Aza, A. Robles-Gómez, R. Pastor-Vargas, L. Tobarra, P. Vidal-Balboa, and M.
+Méndez-Suárez, “Comprehensive AI-Driven Privacy Risk Assessment in Mobile Apps and
+Social Networks,” Cluster Computing, vol. 28, pp. 112–129, 2025.
+3.​ S. Minaee, N. Kalchbrenner, E. Cambria, N. Nikzad, M. Chenaghlu, and J. Gao, “Deep
+Learning-Based Text Classification: A Comprehensive Review,” ACM Computing
+Surveys, vol. 54, no. 3, pp. 1–40, 2021.
+4.​ N. C. Dang, M. N. Moreno-García, and F. De la Prieta, “Sentiment Analysis Based on
+Deep Learning: A Comparative Study,” Electronics, vol. 9, no. 3, p. 483, 2020.
+5.​ L. Bioglio and R. G. Pensa, “Analysis and Classification of Privacy-Sensitive Content in
+Social Media Posts,” EPJ Data Science, vol. 11, no. 1, p. 14, 2022.
+6.​ M. Kayed, R. P. Díaz-Redondo, and A. Mabrouk, “Deep Learning-Based Sentiment
+Classification: A Comparative Survey,” IEEE Access, vol. 8, pp. 223214–223231, 2020.
+
+

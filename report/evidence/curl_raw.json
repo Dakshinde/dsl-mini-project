@@ -1,0 +1,220 @@
+[
+  {
+    "id": "T1",
+    "endpoint": "GET /health",
+    "payload": null,
+    "status": 200,
+    "response": {
+      "status": "healthy",
+      "service": "HEMS Phase 4 Backend",
+      "version": "0.1.0",
+      "message": "HEMS backend is running successfully."
+    }
+  },
+  {
+    "id": "T2",
+    "endpoint": "POST /predict/ac",
+    "payload": {
+      "ambient_temp": 32,
+      "relative_humidity": 70,
+      "motion_sensor": 1,
+      "grid_power": 0.8,
+      "hour": 14,
+      "day_of_week": 3
+    },
+    "status": 200,
+    "response": {
+      "ambient_temp": 32.0,
+      "relative_humidity": 70.0,
+      "motion_sensor": 1,
+      "grid_power": 0.8,
+      "hour": 14,
+      "day_of_week": 3,
+      "predicted_mode": "Eco",
+      "predicted_mode_code": 0,
+      "probability": 0.6839,
+      "model_input_feature_order": [
+        "ambient_temp",
+        "relative_humidity",
+        "motion_sensor",
+        "grid_power",
+        "hour",
+        "day_of_week"
+      ],
+      "model_limitations": "Model predicts among 3 modes: Eco, Max Cool, Dry. Does not predict 'Off' mode. Class mapping derived from dataset analysis."
+    }
+  },
+  {
+    "id": "T3",
+    "endpoint": "POST /occupancy/estimate",
+    "payload": {
+      "timestamp": "morning",
+      "motion_detected": true
+    },
+    "status": 200,
+    "response": {
+      "time_period": "morning",
+      "motion_detected": true,
+      "occupancy_probability": 0.9474,
+      "occupancy_percentage": 94.74,
+      "likely_occupied": true,
+      "provisional_note": "Illustrative probabilities; not trained or validated against ground-truth occupancy labels."
+    }
+  },
+  {
+    "id": "T4",
+    "endpoint": "POST /commands/parse",
+    "payload": {
+      "command": "turn on the AC"
+    },
+    "status": 200,
+    "response": {
+      "command": "turn on the ac",
+      "intent": "power_control",
+      "appliance": "ac",
+      "action": "set_power",
+      "value": "on",
+      "confidence": 0.95,
+      "needs_clarification": false,
+      "message": "ac power command identified: on."
+    }
+  },
+  {
+    "id": "T5",
+    "endpoint": "POST /control/fuzzy",
+    "payload": {
+      "temperature_c": 32,
+      "humidity_pct": 70,
+      "occupancy_pct": 90
+    },
+    "status": 200,
+    "response": {
+      "temperature_c": 32.0,
+      "humidity_pct": 70.0,
+      "occupancy_pct": 90.0,
+      "cooling_demand": 72.56,
+      "suggested_mode": "Dry",
+      "model_note": "Membership functions, fuzzy rules, and AC mode thresholds are provisional engineering choices. The controller has not been validated against measured energy savings, real-world comfort measurements, or a physical AC unit. See PRD for full limitations."
+    }
+  },
+  {
+    "id": "T6",
+    "endpoint": "POST /recommendation",
+    "payload": {
+      "temperature_c": 27,
+      "humidity_pct": 70,
+      "occupancy_pct": 90
+    },
+    "status": 200,
+    "response": {
+      "component_outputs": [
+        {
+          "component": "ac_prediction",
+          "function": "temperature_based_ac_mode",
+          "input_summary": {
+            "temperature_c": 27.0,
+            "humidity_pct": 70.0,
+            "occupancy_pct": 90.0
+          },
+          "output": {
+            "status": "computed",
+            "mode": "Eco",
+            "temperature_c": 27.0,
+            "humidity_pct": 70.0,
+            "note": "Simple temperature-based AC mode; full Random Forest model requires ambient_temp, relative_humidity, motion_sensor, grid_power, hour, day_of_week"
+          }
+        },
+        {
+          "component": "occupancy_estimation",
+          "function": "bayesian_occupancy_estimator",
+          "input_summary": {
+            "occupancy_pct": 90.0
+          },
+          "output": {
+            "status": "computed",
+            "time_period": "morning",
+            "occupancy_percentage": 94.74,
+            "likely_occupied": true
+          }
+        },
+        {
+          "component": "fuzzy_logic_controller",
+          "function": "predict_ac_mode",
+          "input_summary": {
+            "temperature_c": 27.0,
+            "humidity_pct": 70.0,
+            "occupancy_pct": 90.0
+          },
+          "output": {
+            "status": "computed",
+            "cooling_demand": 56.88,
+            "suggested_mode": "Dry"
+          }
+        }
+      ],
+      "overall_recommendation": {
+        "ac_mode": "Eco",
+        "fuzzy_suggested_mode": "Dry",
+        "occupancy_percentage": 90.0,
+        "note": "AC mode, occupancy estimate, and fuzzy recommendation are distinguishable outputs with different purposes. Do not equate them. See component_outputs for detailed individual results.",
+        "ac_disclaimer": "Simple temperature-based AC mode; full Random Forest model requires ambient_temp, relative_humidity, motion_sensor, grid_power, hour, day_of_week"
+      },
+      "disclaimer": "AC mode is temperature-threshold based; full Random Forest model requires additional inputs (motion_sensor, grid_power, hour, day_of_week).; Bayesian occupancy probabilities are provisional/illustrative assumptions, not trained or validated against ground-truth occupancy labels (per PRD limitation).; Membership functions, fuzzy rules, and AC mode thresholds are provisional engineering choices. The controller has not been validated against measured energy savings, real-world comfort measurements, or a physical AC unit."
+    }
+  },
+  {
+    "id": "T7",
+    "endpoint": "POST /predict/ac",
+    "payload": {
+      "ambient_temp": 46,
+      "relative_humidity": 70,
+      "motion_sensor": 1,
+      "grid_power": 0.8,
+      "hour": 14,
+      "day_of_week": 3
+    },
+    "status": 422,
+    "response": {
+      "detail": [
+        {
+          "type": "less_than_equal",
+          "loc": [
+            "body",
+            "ambient_temp"
+          ],
+          "msg": "Input should be less than or equal to 45",
+          "input": 46,
+          "ctx": {
+            "le": 45.0
+          }
+        }
+      ]
+    }
+  },
+  {
+    "id": "T8",
+    "endpoint": "POST /control/fuzzy",
+    "payload": {
+      "temperature_c": 32,
+      "humidity_pct": 101,
+      "occupancy_pct": 90
+    },
+    "status": 422,
+    "response": {
+      "detail": [
+        {
+          "type": "less_than_equal",
+          "loc": [
+            "body",
+            "humidity_pct"
+          ],
+          "msg": "Input should be less than or equal to 100",
+          "input": 101,
+          "ctx": {
+            "le": 100.0
+          }
+        }
+      ]
+    }
+  }
+]

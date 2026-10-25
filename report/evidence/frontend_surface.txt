@@ -1,0 +1,25 @@
+--- tabs ---
+293:/* ---------- Advisor ---------- */
+295:function Advisor() {
+430:/* ---------- Planner ---------- */
+502:function Planner({ plan }: { plan: PlanState }) {
+596:/* ---------- Energy ---------- */
+600:function Energy({ plan }: { plan: PlanState }) {
+655:          Open the Planner tab once the backend is running. The estimate needs the 24-hour plan.
+688:              Planner). All ranges are ±{SPREAD * 100}% around your inputs.
+944:          <h1>HEMS AC Advisor</h1>
+958:          Advisor
+961:          Planner
+964:          Energy
+967:          ML Lab
+972:        {tab === "advisor" && <Advisor />}
+973:        {tab === "planner" && <Planner plan={plan} />}
+974:        {tab === "energy" && <Energy plan={plan} />}
+--- endpoint and weather references ---
+frontend/src/api.ts:24:/** Same thresholds the backend's /recommendation endpoint uses (temperature only). */
+frontend/src/api.ts:47:    const res = await fetch(`${API_BASE}/health`);
+frontend/src/api.ts:63:    post<RfResponse>("/predict/ac", {
+frontend/src/api.ts:71:    post<OccResponse>("/occupancy/estimate", {
+frontend/src/api.ts:77:  const fuzzy = await post<FuzzyResponse>("/control/fuzzy", {
+frontend/src/api.ts:95:    "https://api.open-meteo.com/v1/forecast?latitude=19.076&longitude=72.8777" +
+frontend/src/api.ts:131:    "https://api.open-meteo.com/v1/forecast?latitude=19.076&longitude=72.8777" +

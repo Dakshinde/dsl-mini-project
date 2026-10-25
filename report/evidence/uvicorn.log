@@ -1,0 +1,819 @@
+INFO:     Started server process [36020]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:35138 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49804 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49816 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49820 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49822 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49834 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49844 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49852 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49856 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49860 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49864 - "POST /commands/parse HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49868 - "GET /health HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+✅ Model loaded successfully from: /home/dakshhinde/Code/DSL-2/dsl-mini-project/hems_random_forest.joblib
+INFO:     127.0.0.1:49870 - "POST /predict/ac HTTP/1.1" 200 OK
+✅ Occupancy config loaded from: /home/dakshhinde/Code/DSL-2/dsl-mini-project/HEMS_Phase3A_Artifacts/occupancy_config.json
+INFO:     127.0.0.1:49874 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49890 - "POST /commands/parse HTTP/1.1" 200 OK
+✅ Fuzzy controller dependencies available
+INFO:     127.0.0.1:49900 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60616 - "POST /recommendation HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60630 - "POST /predict/ac HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:60636 - "POST /control/fuzzy HTTP/1.1" 422 Unprocessable Entity
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60640 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60646 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60662 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60668 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60680 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60682 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60684 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60690 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60692 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60700 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60708 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60720 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60736 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60744 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60750 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60760 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60770 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60780 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60782 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60814 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60830 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60842 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60854 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60862 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60874 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60880 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60894 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60902 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60918 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60924 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60928 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60942 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60950 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60964 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60972 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60980 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60992 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:60994 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32778 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32784 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32792 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32794 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32800 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32810 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32818 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32830 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32846 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32856 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32870 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32874 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32878 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32882 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32898 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32906 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32922 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32924 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32932 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32944 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32956 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32968 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32974 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32986 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32988 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:32994 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:32998 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33010 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33012 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33014 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33028 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33032 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33038 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33040 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33046 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33050 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33064 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33076 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33086 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33094 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33102 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33116 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33128 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33138 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33140 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33152 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33164 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33170 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33180 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33194 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33208 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33220 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33234 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33246 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33262 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33276 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33282 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33284 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33288 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33296 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33304 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33318 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33326 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33342 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33344 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33350 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33352 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33362 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33364 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33368 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33374 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33380 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33388 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33398 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33410 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33414 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33418 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33424 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33432 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33438 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33450 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33456 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33470 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:33482 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33496 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33506 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "OPTIONS /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50718 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50688 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "OPTIONS /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50704 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50718 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50678 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50670 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50688 - "POST /control/fuzzy HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50698 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41994 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41984 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41984 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41994 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41984 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41984 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41994 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41984 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41984 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41994 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41984 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41984 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41994 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41984 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41984 - "POST /control/fuzzy HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41994 - "POST /occupancy/estimate HTTP/1.1" 200 OK
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/utils/validation.py:2830: UserWarning: X does not have valid feature names, but RandomForestClassifier was fitted with feature names
+  warnings.warn(
+INFO:     127.0.0.1:41984 - "POST /predict/ac HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41984 - "POST /control/fuzzy HTTP/1.1" 200 OK

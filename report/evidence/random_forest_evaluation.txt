@@ -1,0 +1,94 @@
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator DecisionTreeClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+/home/dakshhinde/Code/DSL-2/dsl-mini-project/.venv/lib/python3.12/site-packages/sklearn/base.py:525: InconsistentVersionWarning: Trying to unpickle estimator RandomForestClassifier from version 1.6.1 when using version 1.9.1. This might lead to breaking code or invalid results. Use at your own risk. For more info please refer to:
+https://scikit-learn.org/stable/model_persistence.html#security-maintainability-limitations
+  warnings.warn(
+DATASET_SHAPE (720, 9)
+DATASET_COLUMNS ['timestamp', 'ambient_temp', 'relative_humidity', 'motion_sensor', 'grid_power', 'optimal_ac_mode', 'hour', 'day_of_week', 'day_of_month']
+MISSING_VALUES
+timestamp            0
+ambient_temp         0
+relative_humidity    0
+motion_sensor        0
+grid_power           0
+optimal_ac_mode      0
+hour                 0
+day_of_week          0
+day_of_month         0
+NUMERIC_DESCRIBE
+                     min    max       mean
+ambient_temp       17.45  38.86  27.987653
+relative_humidity  40.00  93.28  65.266194
+motion_sensor       0.00   1.00   0.615278
+grid_power          0.00   1.00   0.812500
+optimal_ac_mode     0.00   2.00   0.548611
+hour                0.00  23.00  11.500000
+day_of_week         0.00   6.00   3.100000
+day_of_month        1.00  30.00  15.500000
+CLASS_COUNTS
+optimal_ac_mode
+0    455
+1    135
+2    130
+LOADED_MODEL_TYPE RandomForestClassifier
+LOADED_MODEL_PARAMS {'bootstrap': True, 'ccp_alpha': 0.0, 'class_weight': 'balanced', 'criterion': 'gini', 'max_depth': None, 'max_features': 'sqrt', 'max_leaf_nodes': None, 'max_samples': None, 'min_impurity_decrease': 0.0, 'min_samples_leaf': 2, 'min_samples_split': 2, 'min_weight_fraction_leaf': 0.0, 'monotonic_cst': None, 'n_estimators': 300, 'n_jobs': -1, 'oob_score': False, 'random_state': 42, 'verbose': 0, 'warm_start': False}
+LOADED_MODEL_FEATURE_IMPORTANCES
+ambient_temp         0.307101
+relative_humidity    0.277173
+motion_sensor        0.002246
+grid_power           0.099586
+hour                 0.306634
+day_of_week          0.007260
+RF_CV_ACCURACY_MEAN_STD 0.9986111111111111 0.002777777777777768
+RF_CV_MACRO_F1_MEAN_STD 0.9974842767295599 0.005031446540880502
+HOLDOUT_TRAIN_ROWS_TEST_ROWS 576 144
+HOLDOUT_ACCURACY 1.0
+HOLDOUT_MACRO_F1 1.0
+HOLDOUT_CLASSIFICATION_REPORT
+              precision    recall  f1-score   support
+
+         Eco       1.00      1.00      1.00        93
+    Max Cool       1.00      1.00      1.00        28
+         Dry       1.00      1.00      1.00        23
+
+    accuracy                           1.00       144
+   macro avg       1.00      1.00      1.00       144
+weighted avg       1.00      1.00      1.00       144
+
+HOLDOUT_CONFUSION_MATRIX
+[[93  0  0]
+ [ 0 28  0]
+ [ 0  0 23]]
+MAJORITY_CLASS 0
+MAJORITY_CV_ACCURACY_MEAN_STD 0.6319444444444444 0.0
+MAJORITY_CV_MACRO_F1_MEAN_STD 0.2581560283687943 0.0
+LOGREG_CV_ACCURACY_MEAN_STD 0.9902777777777778 0.005555555555555536
+LOGREG_CV_MACRO_F1_MEAN_STD 0.9875936340243758 0.007408868976520586
+DEPTH3_TREE_ACCURACY 0.9722222222222222
+DEPTH3_TREE_RULES
+|--- hour <= 9.50
+|   |--- relative_humidity <= 75.06
+|   |   |--- grid_power <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- grid_power >  0.50
+|   |   |   |--- class: 1
+|   |--- relative_humidity >  75.06
+|   |   |--- grid_power <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- grid_power >  0.50
+|   |   |   |--- class: 2
+|--- hour >  9.50
+|   |--- ambient_temp <= 32.08
+|   |   |--- hour <= 22.50
+|   |   |   |--- class: 0
+|   |   |--- hour >  22.50
+|   |   |   |--- class: 0
+|   |--- ambient_temp >  32.08
+|   |   |--- grid_power <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- grid_power >  0.50
+|   |   |   |--- class: 1
+
+LABELS_LOOK_RULE_GENERATED YES: a shallow tree expresses compact threshold-like rules; this is evidence of synthetic generation, not real-world validity.
+REQUIRED_SENTENCE High scores on synthetic labels show the model recovers the generating rules, not real-world accuracy.

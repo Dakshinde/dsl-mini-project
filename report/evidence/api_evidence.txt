@@ -1,0 +1,69 @@
+NLP_TABLE
+                       command        intent    appliance                                                       value  confidence  needs_clarification expected_intent  pass
+                turn on the AC power_control           ac                                                          on        0.95                False   power_control  True
+            switch off the fan power_control          fan                                                         off        0.95                False   power_control  True
+        set the AC to eco mode      set_mode           ac                                                         eco        0.98                False        set_mode  True
+    maximum cooling for the AC      set_mode           ac                                                    max_cool        0.98                False        set_mode  True
+dehumidify the air conditioner      set_mode           ac                                                         dry        0.98                False        set_mode  True
+   save energy while I am away energy_saving   whole_home        {'energy_saving': True, 'occupancy_context': 'away'}        0.95                False   energy_saving  True
+              save electricity energy_saving   whole_home {'energy_saving': True, 'occupancy_context': 'unspecified'}        0.85                False   energy_saving  True
+                    play music       unknown          NaN                                                        None        0.00                 True         unknown  True
+   turn on and turn off the AC     ambiguous           ac                                                        None        0.00                 True       ambiguous  True
+      turn on the refrigerator power_control refrigerator                                                          on        0.95                False   power_control  True
+CURL_TEST_TABLE
+id                 endpoint                                                                                                              input  expected  actual  pass
+T1              GET /health                                                                                                               None       200     200  True
+T2         POST /predict/ac {'ambient_temp': 32, 'relative_humidity': 70, 'motion_sensor': 1, 'grid_power': 0.8, 'hour': 14, 'day_of_week': 3}       200     200  True
+T3 POST /occupancy/estimate                                                                  {'timestamp': 'morning', 'motion_detected': True}       200     200  True
+T4     POST /commands/parse                                                                                      {'command': 'turn on the AC'}       200     200  True
+T5      POST /control/fuzzy                                                     {'temperature_c': 32, 'humidity_pct': 70, 'occupancy_pct': 90}       200     200  True
+T6     POST /recommendation                                                     {'temperature_c': 27, 'humidity_pct': 70, 'occupancy_pct': 90}       200     200  True
+T7         POST /predict/ac {'ambient_temp': 46, 'relative_humidity': 70, 'motion_sensor': 1, 'grid_power': 0.8, 'hour': 14, 'day_of_week': 3}       422     422  True
+T8      POST /control/fuzzy                                                    {'temperature_c': 32, 'humidity_pct': 101, 'occupancy_pct': 90}       422     422  True
+COMPARISON_ROWS 42
+AGREEMENT_rf_VS_fuzzy 0.6190476190476191
+AGREEMENT_rf_VS_temperature_rule 0.4523809523809524
+AGREEMENT_fuzzy_VS_temperature_rule 0.47619047619047616
+ temperature  humidity       rf    fuzzy temperature_rule  occupancy_percentage    statuses
+          20        50      Eco      Off              Off                 93.64 200/200/200
+          20        80      Eco      Off              Off                 93.64 200/200/200
+          21        50      Eco      Off              Off                 93.64 200/200/200
+          21        80      Eco      Off              Off                 93.64 200/200/200
+          22        50      Eco      Eco              Off                 93.64 200/200/200
+          22        80      Eco      Dry              Off                 93.64 200/200/200
+          23        50      Eco      Eco              Off                 93.64 200/200/200
+          23        80      Eco      Dry              Off                 93.64 200/200/200
+          24        50      Eco      Eco              Off                 93.64 200/200/200
+          24        80      Eco      Dry              Off                 93.64 200/200/200
+          25        50      Eco      Eco              Eco                 93.64 200/200/200
+          25        80      Eco      Dry              Eco                 93.64 200/200/200
+          26        50      Eco      Eco              Eco                 93.64 200/200/200
+          26        80      Eco      Dry              Eco                 93.64 200/200/200
+          27        50      Eco      Eco              Eco                 93.64 200/200/200
+          27        80      Eco      Dry              Eco                 93.64 200/200/200
+          28        50      Eco      Eco              Eco                 93.64 200/200/200
+          28        80      Dry      Dry              Eco                 93.64 200/200/200
+          29        50      Eco      Eco              Eco                 93.64 200/200/200
+          29        80      Dry      Dry              Eco                 93.64 200/200/200
+          30        50      Eco      Eco              Eco                 93.64 200/200/200
+          30        80      Dry      Dry              Eco                 93.64 200/200/200
+          31        50      Eco      Eco              Eco                 93.64 200/200/200
+          31        80      Dry      Dry              Eco                 93.64 200/200/200
+          32        50      Eco      Eco              Dry                 93.64 200/200/200
+          32        80      Dry      Dry              Dry                 93.64 200/200/200
+          33        50 Max Cool Max Cool              Dry                 93.64 200/200/200
+          33        80      Dry      Dry              Dry                 93.64 200/200/200
+          34        50 Max Cool Max Cool              Dry                 93.64 200/200/200
+          34        80      Dry      Dry              Dry                 93.64 200/200/200
+          35        50 Max Cool Max Cool              Dry                 93.64 200/200/200
+          35        80      Dry Max Cool              Dry                 93.64 200/200/200
+          36        50 Max Cool Max Cool              Dry                 93.64 200/200/200
+          36        80      Dry Max Cool              Dry                 93.64 200/200/200
+          37        50 Max Cool Max Cool              Dry                 93.64 200/200/200
+          37        80      Dry Max Cool              Dry                 93.64 200/200/200
+          38        50 Max Cool Max Cool         Max Cool                 93.64 200/200/200
+          38        80      Dry Max Cool         Max Cool                 93.64 200/200/200
+          39        50 Max Cool Max Cool         Max Cool                 93.64 200/200/200
+          39        80      Dry Max Cool         Max Cool                 93.64 200/200/200
+          40        50 Max Cool Max Cool         Max Cool                 93.64 200/200/200
+          40        80      Dry Max Cool         Max Cool                 93.64 200/200/200

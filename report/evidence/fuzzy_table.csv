@@ -1,0 +1,9 @@
+temperature_c,humidity_pct,occupancy_pct,cooling_demand,suggested_mode
+25,50,5,5.42,Off
+26,50,90,45.0,Eco
+30,50,90,52.1,Eco
+32,70,90,72.56,Dry
+42,60,95,90.71,Max Cool
+34,64,80,73.28,Max Cool
+34,65,80,74.27,Dry
+38,40,90,78.19,Max Cool
